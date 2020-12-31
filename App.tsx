@@ -5,8 +5,7 @@ import { useAuthenticate } from './src/authentication/Authenticate'
 import LoginScreen from './src/screens/Login/index.native'
 
 function App() {
-    const { user, onLogin, onAppleLogin, onLogout } = useAuthenticate()
-    const isLoggedIn = user !== undefined && user !== null
+    const { onLogin, onAppleLogin, onLogout, isLoggedIn } = useAuthenticate()
 
     if (isLoggedIn) {
         return (

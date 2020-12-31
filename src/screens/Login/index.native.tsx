@@ -2,7 +2,11 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet, Dimensions, TextInput, KeyboardAvoidingView } from 'react-native'
 import Svg, { Image, Circle, ClipPath } from 'react-native-svg'
 import Animated from 'react-native-reanimated'
-import { TapGestureHandler, State } from 'react-native-gesture-handler'
+import {
+    TapGestureHandler,
+    State as GestureState,
+    TouchableOpacity,
+} from 'react-native-gesture-handler'
 
 const { width, height } = Dimensions.get('window')
 import { runTiming, DEFAULT_HEIGHT } from './helper'
@@ -10,7 +14,7 @@ import { AppleSignIn, onAppleButtonPress } from '../../authentication/Authentica
 
 const { Value, event, block, cond, eq, set, Clock, interpolate, Extrapolate, concat } = Animated
 
-class LoginScreen extends Component<Props> {
+class LoginScreen extends Component<Props, State> {
     buttonOpacity: Animated.Value<1>
     onStateChange: (...args: any[]) => void
     onCloseState: (...args: any[]) => void
@@ -21,17 +25,22 @@ class LoginScreen extends Component<Props> {
     textInputOpacity: Animated.Node<number>
     rotateCross: Animated.Node<number>
 
-    constructor(props: any) {
+    constructor(props: Props) {
         super(props)
 
         this.buttonOpacity = new Value(1)
+
+        this.state = {
+            username: '',
+            password: '',
+        }
 
         this.onStateChange = event([
             {
                 nativeEvent: ({ state }: any) =>
                     block([
                         cond(
-                            eq(state, State.END),
+                            eq(state, GestureState.END),
                             set(this.buttonOpacity, runTiming(new Clock(), 1, 0)),
                         ),
                     ]),
@@ -43,7 +52,7 @@ class LoginScreen extends Component<Props> {
                 nativeEvent: ({ state }: any) =>
                     block([
                         cond(
-                            eq(state, State.END),
+                            eq(state, GestureState.END),
                             set(this.buttonOpacity, runTiming(new Clock(), 0, 1)),
                         ),
                     ]),
@@ -142,6 +151,13 @@ class LoginScreen extends Component<Props> {
         </TapGestureHandler>
     )
 
+    signIn = () => {
+        const { password, username } = this.state
+        if (password.length && username.length) {
+            this.props.onLogin(username, password)
+        }
+    }
+
     render() {
         const { onAppleLogin } = this.props
 
@@ -171,24 +187,31 @@ class LoginScreen extends Component<Props> {
                     >
                         {this.renderCloseButton()}
                         <TextInput
+                            onChangeText={(username) => this.setState({ username })}
                             placeholder="EMAIL"
                             placeholderTextColor="black"
                             style={styles.textInput}
                         />
                         <TextInput
+                            onChangeText={(password) => this.setState({ password })}
                             placeholder="PASSWORD"
                             placeholderTextColor="black"
                             style={styles.textInput}
                         />
-                        <Animated.View style={[styles.button, styles.shadow]}>
-                            <Text
-                                style={{
-                                    fontSize: 20,
-                                    fontWeight: '600',
-                                }}
+                        <Animated.View>
+                            <TouchableOpacity
+                                onPress={this.signIn}
+                                style={[styles.button, styles.shadow]}
                             >
-                                SIGN INN
-                            </Text>
+                                <Text
+                                    style={{
+                                        fontSize: 20,
+                                        fontWeight: '600',
+                                    }}
+                                >
+                                    SIGN INN
+                                </Text>
+                            </TouchableOpacity>
                         </Animated.View>
                     </Animated.View>
                 </View>
@@ -264,8 +287,13 @@ const styles = StyleSheet.create({
 })
 
 type Props = {
-    onLogin: () => void
+    onLogin: (username: string, password: string) => void
     onAppleLogin: () => void
+}
+
+type State = {
+    password: string
+    username: string
 }
 
 export default LoginScreen

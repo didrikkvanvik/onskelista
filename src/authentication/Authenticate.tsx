@@ -38,37 +38,26 @@ const signInAnonymously = (onResult) => {
         })
 }
 
-function signInWithEmailAndPassword() {
+function signInWithEmailAndPassword(username: string, password: string) {
+    // username : jane.doe@example.com
+    // password: SuperSecretPassword!
     auth()
-        .signInWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
+        .signInWithEmailAndPassword(username, password)
         .then((user) => {
             console.log('User account created & signed in!', user)
             return user
         })
         .catch((error) => {
-            if (error.code === 'auth/email-already-in-use') {
-                console.log('That email address is already in use!')
-            }
-
-            if (error.code === 'auth/invalid-email') {
-                console.log('That email address is invalid!')
-            }
-
-            console.error(error)
+            console.error('error', error)
             return undefined
         })
 }
 
 const signOut = () => {
-    auth()
-        .signOut()
-        .then(() => {
-            console.log('User signed out!')
-        })
+    auth().signOut()
 }
 
 export async function onAppleButtonPress() {
-    console.log('Start the sign-in request')
     // Start the sign-in request
     const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
@@ -95,19 +84,28 @@ export async function onAppleButtonPress() {
 export function useAuthenticate() {
     const [initializing, setInitializing] = useState(true)
     const [user, setUser] = useState()
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
 
     function onAuthStateChanged(newUser: any) {
         setUser(newUser)
         if (initializing) setInitializing(false)
     }
 
+    auth().onAuthStateChanged((hello) => {
+        if (hello) {
+            setIsLoggedIn(true)
+        } else {
+            setIsLoggedIn(false)
+        }
+    })
+
     useEffect(() => {
         const subscriber = auth().onAuthStateChanged(onAuthStateChanged)
         return subscriber // unsubscribe on unmount
     }, [])
 
-    const onLogin = async () => {
-        const loggedInUser = await signInWithEmailAndPassword()
+    const onLogin = async (username: string, password: string) => {
+        const loggedInUser = await signInWithEmailAndPassword(username, password)
         onAuthStateChanged(loggedInUser)
     }
 
@@ -125,5 +123,6 @@ export function useAuthenticate() {
         onLogin,
         onAppleLogin,
         onLogout,
+        isLoggedIn,
     }
 }
