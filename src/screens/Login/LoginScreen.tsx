@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
+        backgroundColor: 'white',
     },
     container: {
         flex: 1,
