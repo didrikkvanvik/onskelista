@@ -6,10 +6,11 @@ import { TapGestureHandler, State } from 'react-native-gesture-handler'
 
 const { width, height } = Dimensions.get('window')
 import { runTiming, DEFAULT_HEIGHT } from './helper'
+import { AppleSignIn, onAppleButtonPress } from '../../authentication/Authenticate'
 
 const { Value, event, block, cond, eq, set, Clock, interpolate, Extrapolate, concat } = Animated
 
-class LoginScreen extends Component {
+class LoginScreen extends Component<Props> {
     buttonOpacity: Animated.Value<1>
     onStateChange: (...args: any[]) => void
     onCloseState: (...args: any[]) => void
@@ -121,7 +122,7 @@ class LoginScreen extends Component {
                     },
                 ]}
             >
-                <Text style={styles.signInText}>SIGN IN</Text>
+                <Text style={styles.signInText}>Logg inn med brukernavn</Text>
             </Animated.View>
         </TapGestureHandler>
     )
@@ -142,25 +143,20 @@ class LoginScreen extends Component {
     )
 
     render() {
+        const { onAppleLogin } = this.props
+
         return (
             <KeyboardAvoidingView behavior="padding" enabled style={styles.keyboardAvoidingView}>
                 {this.renderBackground()}
                 <View style={styles.outerInputWrapper}>
                     {this.renderSignInButton()}
                     <Animated.View
-                        style={[
-                            styles.button,
-                            styles.shadow,
-                            {
-                                backgroundColor: '#2E71DC',
-                                opacity: this.buttonOpacity,
-                                transform: [{ translateY: this.buttonY }],
-                            },
-                        ]}
+                        style={{
+                            opacity: this.buttonOpacity,
+                            transform: [{ translateY: this.buttonY }],
+                        }}
                     >
-                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
-                            SIGN IN WITH FACEBOOK
-                        </Text>
+                        <AppleSignIn onPress={onAppleLogin} />
                     </Animated.View>
                     <Animated.View
                         style={[
@@ -200,12 +196,11 @@ class LoginScreen extends Component {
         )
     }
 }
-export default LoginScreen
 
 const styles = StyleSheet.create({
     signInText: {
-        fontSize: 20,
-        fontWeight: 'bold',
+        fontSize: 18,
+        fontWeight: '600',
     },
     outerInputWrapper: {
         height: height / 3,
@@ -226,9 +221,9 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: 'white',
-        height: 70,
+        height: 60,
         marginHorizontal: 20,
-        borderRadius: 35,
+        borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 5,
@@ -267,3 +262,10 @@ const styles = StyleSheet.create({
         shadowColor: 'rgba(0,0,0,0.2)',
     },
 })
+
+type Props = {
+    onLogin: () => void
+    onAppleLogin: () => void
+}
+
+export default LoginScreen
