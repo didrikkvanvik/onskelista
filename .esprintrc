@@ -1,0 +1,11 @@
+{
+  "paths": [
+    "src/*/+(screens|navigation|components|types|utils)/**/+(*.js|*.ts|*.tsx)",
+    "+(*.js|*.ts|*.tsx)"
+  ],
+  "ignored": [
+    "**/node_modules/**/*",
+    "src/assets/recepies/*"
+  ],
+  "port": 5004
+}
