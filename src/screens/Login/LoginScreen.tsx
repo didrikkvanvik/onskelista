@@ -5,6 +5,7 @@ import Animated, { Easing } from 'react-native-reanimated';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
 
 const { width, height } = Dimensions.get('window');
+import { runTiming } from './helper'
 
 const {
   Value,
@@ -14,44 +15,10 @@ const {
   eq,
   set,
   Clock,
-  startClock,
-  stopClock,
-  debug,
-  timing,
-  clockRunning,
   interpolate,
   Extrapolate,
   concat,
 } = Animated;
-
-function runTiming(clock: any, value: any, dest: any) {
-  const state = {
-    finished: new Value(0),
-    position: new Value(0),
-    time: new Value(0),
-    frameTime: new Value(0)
-  };
-
-  const config = {
-    duration: 500,
-    toValue: new Value(0),
-    easing: Easing.inOut(Easing.ease)
-  };
-
-  return block([
-    cond(clockRunning(clock), 0, [
-      set(state.finished, 0),
-      set(state.time, 0),
-      set(state.position, value),
-      set(state.frameTime, 0),
-      set(config.toValue, dest),
-      startClock(clock)
-    ]),
-    timing(clock, state, config),
-    cond(state.finished, debug('stop clock', stopClock(clock))),
-    state.position
-  ]);
-}
 
 class LoginScreen extends Component {
   buttonOpacity: Animated.Value<1>;
@@ -71,7 +38,7 @@ class LoginScreen extends Component {
 
     this.onStateChange = event([
       {
-        nativeEvent: ({ state }) =>
+        nativeEvent: ({ state }: any) =>
           block([
             cond(
               eq(state, State.END),
@@ -83,7 +50,7 @@ class LoginScreen extends Component {
 
     this.onCloseState = event([
         {
-          nativeEvent: ({ state }) =>
+          nativeEvent: ({ state }: any) =>
             block([
               cond(
                 eq(state, State.END),
@@ -157,6 +124,7 @@ class LoginScreen extends Component {
             <Animated.View
               style={{
                 ...styles.button,
+                ...styles.shadow,
                 opacity: this.buttonOpacity,
                 transform: [{ translateY: this.buttonY }]
               }}
@@ -167,6 +135,7 @@ class LoginScreen extends Component {
           <Animated.View
             style={{
               ...styles.button,
+              ...styles.shadow,
               backgroundColor: '#2E71DC',
               opacity: this.buttonOpacity,
               transform: [{ translateY: this.buttonY }]
@@ -177,11 +146,11 @@ class LoginScreen extends Component {
             </Text>
           </Animated.View>
           <Animated.View style={{
+              ...StyleSheet.absoluteFill,
               zIndex: this.textInputZindex,
               opacity: this.textInputOpacity,
               transform: [{ translateY: this.textInputY }],
               height: height / 3,
-              ...StyleSheet.absoluteFill,
               top: null,
               justifyContent: 'center',
               backgroundColor: '#fff',
@@ -189,7 +158,7 @@ class LoginScreen extends Component {
               borderTopRightRadius: 30,
             }}>
                 <TapGestureHandler onHandlerStateChange={this.onCloseState}>
-                    <Animated.View style={styles.closeButton}>
+                    <Animated.View style={[styles.closeButton, styles.shadow]}>
                         <Animated.Text style={{
                             fontSize: 15,
                             transform: [{rotate: concat(this.rotateCross, 'deg') }],
@@ -206,7 +175,7 @@ class LoginScreen extends Component {
                 style={styles.textInput}
                 placeholderTextColor="black"
               />
-                <Animated.View style={styles.button}>
+                <Animated.View style={[styles.button, styles.shadow]}>
                     <Text style={{
                         fontSize: 20,
                         fontWeight: '600'
@@ -236,12 +205,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 5,
-    shadowOffset: {
-        width: 0,
-        height: 2,
-    },
-    shadowOpacity: 0.8,
-    shadowColor: 'rgba(0,0,0,0.2)'
   },
   textInput: {
       height: 50,
@@ -262,11 +225,13 @@ const styles = StyleSheet.create({
       position: 'absolute',
       top: -20,
       left: width / 2 - 20,
+  },
+    shadow: {
       shadowOffset: {
         width: 0,
         height: 2,
       },
       shadowOpacity: 0.8,
       shadowColor: 'rgba(0,0,0,0.2)'
-  }
+    }
 });
