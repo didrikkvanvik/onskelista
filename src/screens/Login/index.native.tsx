@@ -10,11 +10,12 @@ import {
 
 const { width, height } = Dimensions.get('window')
 import { runTiming, DEFAULT_HEIGHT } from './helper'
-import { AppleSignIn, onAppleButtonPress } from '../../authentication/Authenticate'
+import { AppleSignIn } from '../../authentication/Authenticate'
+import Inputs from './Inputs'
 
 const { Value, event, block, cond, eq, set, Clock, interpolate, Extrapolate, concat } = Animated
 
-class LoginScreen extends Component<Props, State> {
+class LoginScreen extends Component<Props> {
     buttonOpacity: Animated.Value<1>
     onStateChange: (...args: any[]) => void
     onCloseState: (...args: any[]) => void
@@ -29,11 +30,6 @@ class LoginScreen extends Component<Props, State> {
         super(props)
 
         this.buttonOpacity = new Value(1)
-
-        this.state = {
-            username: '',
-            password: '',
-        }
 
         this.onStateChange = event([
             {
@@ -151,11 +147,8 @@ class LoginScreen extends Component<Props, State> {
         </TapGestureHandler>
     )
 
-    signIn = () => {
-        const { password, username } = this.state
-        if (password.length && username.length) {
-            this.props.onLogin(username, password)
-        }
+    signIn = (username: string, password: string) => {
+        this.props.onLogin(username, password)
     }
 
     render() {
@@ -186,33 +179,7 @@ class LoginScreen extends Component<Props, State> {
                         ]}
                     >
                         {this.renderCloseButton()}
-                        <TextInput
-                            onChangeText={(username) => this.setState({ username })}
-                            placeholder="EMAIL"
-                            placeholderTextColor="black"
-                            style={styles.textInput}
-                        />
-                        <TextInput
-                            onChangeText={(password) => this.setState({ password })}
-                            placeholder="PASSWORD"
-                            placeholderTextColor="black"
-                            style={styles.textInput}
-                        />
-                        <Animated.View>
-                            <TouchableOpacity
-                                onPress={this.signIn}
-                                style={[styles.button, styles.shadow]}
-                            >
-                                <Text
-                                    style={{
-                                        fontSize: 20,
-                                        fontWeight: '600',
-                                    }}
-                                >
-                                    SIGN INN
-                                </Text>
-                            </TouchableOpacity>
-                        </Animated.View>
+                        <Inputs onPress={this.signIn} />
                     </Animated.View>
                 </View>
             </KeyboardAvoidingView>
@@ -246,7 +213,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         height: 60,
         marginHorizontal: 20,
-        borderRadius: 4,
+        borderRadius: 6,
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 5,
@@ -255,15 +222,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         justifyContent: 'flex-end',
-    },
-    textInput: {
-        height: 50,
-        borderRadius: 25,
-        borderWidth: 0.5,
-        marginHorizontal: 20,
-        paddingLeft: 10,
-        marginVertical: 5,
-        borderColor: 'rgba(0,0,0,0.2)',
     },
     closeButton: {
         height: 40,
@@ -289,11 +247,6 @@ const styles = StyleSheet.create({
 type Props = {
     onLogin: (username: string, password: string) => void
     onAppleLogin: () => void
-}
-
-type State = {
-    password: string
-    username: string
 }
 
 export default LoginScreen

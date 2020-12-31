@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     logoutButton: {
         alignItems: 'center',
         height: 60,
-        borderRadius: 4,
+        borderRadius: 8,
         backgroundColor: 'red',
         justifyContent: 'center',
         fontSize: 20,

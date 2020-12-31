@@ -42,7 +42,7 @@ function signInWithEmailAndPassword(username: string, password: string) {
     // username : jane.doe@example.com
     // password: SuperSecretPassword!
     auth()
-        .signInWithEmailAndPassword(username, password)
+        .signInWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
         .then((user) => {
             console.log('User account created & signed in!', user)
             return user
@@ -91,18 +91,13 @@ export function useAuthenticate() {
         if (initializing) setInitializing(false)
     }
 
-    auth().onAuthStateChanged((hello) => {
-        if (hello) {
+    auth().onAuthStateChanged((userObject) => {
+        if (userObject) {
             setIsLoggedIn(true)
         } else {
             setIsLoggedIn(false)
         }
     })
-
-    useEffect(() => {
-        const subscriber = auth().onAuthStateChanged(onAuthStateChanged)
-        return subscriber // unsubscribe on unmount
-    }, [])
 
     const onLogin = async (username: string, password: string) => {
         const loggedInUser = await signInWithEmailAndPassword(username, password)
