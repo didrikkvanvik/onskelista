@@ -1,0 +1,12 @@
+{
+  "name": "onskelista",
+  "displayName": "onskelista",
+  "expo": {
+    "name": "onskelista",
+    "slug": "onskelista",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

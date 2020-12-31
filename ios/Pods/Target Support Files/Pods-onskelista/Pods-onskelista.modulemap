@@ -1,0 +1,6 @@
+module Pods_onskelista {
+  umbrella header "Pods-onskelista-umbrella.h"
+
+  export *
+  module * { export * }
+}
