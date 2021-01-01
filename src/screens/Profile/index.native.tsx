@@ -1,21 +1,21 @@
-import React, { FC } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { Icon } from 'react-native-elements'
+import React, { FC, useEffect } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { colors } from '../../assets/styles/index.native'
+import { useAuthenticate } from '../../authentication/Authenticate'
 
-const Home: FC<Props> = ({ navigation }) => {
-    const navigateToProfile = () => {
-        navigation.navigate('Profile')
-    }
+const Profile: FC<Props> = ({ navigation }) => {
+    const { onLogout } = useAuthenticate()
+
+    useEffect(() => {
+        navigation.setOptions({ title: 'Min profil' })
+    }, [])
+
     return (
         <View style={styles.container}>
-            <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={navigateToProfile}
-                style={styles.profileButton}
-            >
-                <Icon color={colors.black} name="user-circle-o" size={32} type="font-awesome" />
+            <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 100 }}>PROFILEN MIIIN</Text>
+            <TouchableOpacity activeOpacity={0.8} onPress={onLogout} style={styles.logoutButton}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Logg ut</Text>
             </TouchableOpacity>
         </View>
     )
@@ -56,4 +56,4 @@ type Props = {
     navigation: any
 }
 
-export default Home
+export default Profile
