@@ -2,7 +2,7 @@
 import { Dimensions } from 'react-native'
 import Animated, { Easing } from 'react-native-reanimated'
 
-const { width, height } = Dimensions.get('window')
+const { height } = Dimensions.get('window')
 const { Value, block, cond, set, startClock, stopClock, debug, timing, clockRunning } = Animated
 
 export function runTiming(clock: any, value: any, dest: any) {

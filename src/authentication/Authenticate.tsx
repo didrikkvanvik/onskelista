@@ -113,11 +113,18 @@ export function useAuthenticate() {
         onAuthStateChanged(undefined)
     }
 
+    const onSignUp = (username: string, password: string) => {
+        console.log('signup with', username, password)
+        // const loggedInUser = await signInWithEmailAndPassword(username, password)
+        // onAuthStateChanged(loggedInUser)
+    }
+
     return {
         user,
         onLogin,
         onAppleLogin,
         onLogout,
         isLoggedIn,
+        onSignUp,
     }
 }

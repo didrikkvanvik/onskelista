@@ -5,7 +5,7 @@ import { useAuthenticate } from './src/authentication/Authenticate'
 import LoginScreen from './src/screens/Login/index.native'
 
 function App() {
-    const { onLogin, onAppleLogin, onLogout, isLoggedIn } = useAuthenticate()
+    const { onLogin, onAppleLogin, onLogout, isLoggedIn, onSignUp } = useAuthenticate()
 
     if (isLoggedIn) {
         return (
@@ -20,7 +20,7 @@ function App() {
             </View>
         )
     }
-    return <LoginScreen onAppleLogin={onAppleLogin} onLogin={onLogin} />
+    return <LoginScreen onAppleLogin={onAppleLogin} onLogin={onLogin} onSignUp={onSignUp} />
 }
 
 const styles = StyleSheet.create({

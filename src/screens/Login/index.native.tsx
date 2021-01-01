@@ -1,21 +1,25 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Dimensions, TextInput, KeyboardAvoidingView } from 'react-native'
+import {
+    View,
+    Text,
+    StyleSheet,
+    Dimensions,
+    KeyboardAvoidingView,
+    TouchableOpacity,
+} from 'react-native'
 import Svg, { Image, Circle, ClipPath } from 'react-native-svg'
 import Animated from 'react-native-reanimated'
-import {
-    TapGestureHandler,
-    State as GestureState,
-    TouchableOpacity,
-} from 'react-native-gesture-handler'
+import { TapGestureHandler, State as GestureState } from 'react-native-gesture-handler'
 
-const { width, height } = Dimensions.get('window')
-import { runTiming, DEFAULT_HEIGHT } from './helper'
 import { AppleSignIn } from '../../authentication/Authenticate'
+import { runTiming, DEFAULT_HEIGHT } from './helper'
 import Inputs from './Inputs'
 
+const { width, height } = Dimensions.get('window')
 const { Value, event, block, cond, eq, set, Clock, interpolate, Extrapolate, concat } = Animated
+const ANIMATION_HEIGHT = height / 2.4
 
-class LoginScreen extends Component<Props> {
+class LoginScreen extends Component<Props, State> {
     buttonOpacity: Animated.Value<1>
     onStateChange: (...args: any[]) => void
     onCloseState: (...args: any[]) => void
@@ -28,6 +32,11 @@ class LoginScreen extends Component<Props> {
 
     constructor(props: Props) {
         super(props)
+
+        this.state = {
+            isSignUp: false,
+            error: '',
+        }
 
         this.buttonOpacity = new Value(1)
 
@@ -63,7 +72,7 @@ class LoginScreen extends Component<Props> {
 
         this.backgroundImageY = interpolate(this.buttonOpacity, {
             inputRange: [0, 1],
-            outputRange: [-height / 3 - 50, 0],
+            outputRange: [-ANIMATION_HEIGHT - 50, 0],
             extrapolate: Extrapolate.CLAMP,
         })
 
@@ -127,7 +136,7 @@ class LoginScreen extends Component<Props> {
                     },
                 ]}
             >
-                <Text style={styles.signInText}>Logg inn med brukernavn</Text>
+                <Text style={styles.signInText}>Logg inn</Text>
             </Animated.View>
         </TapGestureHandler>
     )
@@ -135,14 +144,36 @@ class LoginScreen extends Component<Props> {
     renderCloseButton = () => (
         <TapGestureHandler onHandlerStateChange={this.onCloseState}>
             <Animated.View style={[styles.closeButton, styles.shadow]}>
-                <Animated.Text
-                    style={{
-                        fontSize: 15,
-                        transform: [{ rotate: concat(this.rotateCross, 'deg') }],
-                    }}
-                >
-                    X
-                </Animated.Text>
+                <TouchableOpacity onPress={() => this.setState({ isSignUp: false, error: '' })}>
+                    <Animated.Text
+                        style={{
+                            fontSize: 15,
+                            transform: [{ rotate: concat(this.rotateCross, 'deg') }],
+                        }}
+                    >
+                        X
+                    </Animated.Text>
+                </TouchableOpacity>
+            </Animated.View>
+        </TapGestureHandler>
+    )
+
+    renderCreateUserButton = () => (
+        <TapGestureHandler onHandlerStateChange={this.onStateChange}>
+            <Animated.View
+                style={[
+                    {
+                        opacity: this.buttonOpacity,
+                        transform: [{ translateY: this.buttonY }],
+                    },
+                ]}
+            >
+                <TouchableOpacity onPress={() => this.setState({ isSignUp: true })}>
+                    <Text style={styles.label}>
+                        Har du ikke konto?{' '}
+                        <Text style={[styles.label, styles.labelButtonText]}>Opprett her.</Text>
+                    </Text>
+                </TouchableOpacity>
             </Animated.View>
         </TapGestureHandler>
     )
@@ -151,14 +182,21 @@ class LoginScreen extends Component<Props> {
         this.props.onLogin(username, password)
     }
 
+    signUp = (username: string, password: string) => {
+        this.props.onSignUp(username, password)
+    }
+
     render() {
         const { onAppleLogin } = this.props
+        const { error, isSignUp } = this.state
 
         return (
             <KeyboardAvoidingView behavior="padding" enabled style={styles.keyboardAvoidingView}>
                 {this.renderBackground()}
+
                 <View style={styles.outerInputWrapper}>
                     {this.renderSignInButton()}
+
                     <Animated.View
                         style={{
                             opacity: this.buttonOpacity,
@@ -166,7 +204,9 @@ class LoginScreen extends Component<Props> {
                         }}
                     >
                         <AppleSignIn onPress={onAppleLogin} />
+                        {this.renderCreateUserButton()}
                     </Animated.View>
+
                     <Animated.View
                         style={[
                             styles.inputView,
@@ -179,7 +219,16 @@ class LoginScreen extends Component<Props> {
                         ]}
                     >
                         {this.renderCloseButton()}
-                        <Inputs onPress={this.signIn} />
+
+                        <Inputs
+                            error={error}
+                            isSignUp={isSignUp}
+                            onLogin={this.signIn}
+                            onSignUp={this.signUp}
+                            setError={(errorMessage: string) =>
+                                this.setState({ error: errorMessage })
+                            }
+                        />
                     </Animated.View>
                 </View>
             </KeyboardAvoidingView>
@@ -193,16 +242,15 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     outerInputWrapper: {
-        height: height / 3,
+        height: ANIMATION_HEIGHT,
         justifyContent: 'center',
     },
     inputView: {
-        height: height / 3,
+        height: ANIMATION_HEIGHT,
         top: null,
         justifyContent: 'center',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
-        backgroundColor: 'white',
     },
     container: {
         flex: 1,
@@ -217,6 +265,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 5,
+    },
+    label: {
+        fontSize: 14,
+        alignSelf: 'center',
+        marginTop: 16,
+    },
+    labelButtonText: {
+        textDecorationLine: 'underline',
+        lineHeight: 0,
+        marginTop: 0,
+    },
+    labelButton: {
+        marginBottom: -2,
     },
     keyboardAvoidingView: {
         flex: 1,
@@ -247,6 +308,12 @@ const styles = StyleSheet.create({
 type Props = {
     onLogin: (username: string, password: string) => void
     onAppleLogin: () => void
+    onSignUp: (username: string, password: string) => void
+}
+
+type State = {
+    error: string
+    isSignUp: boolean
 }
 
 export default LoginScreen
