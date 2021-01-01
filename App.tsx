@@ -1,44 +1,22 @@
+import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet, TouchableOpacity, Text, View } from 'react-native'
 
 import { useAuthenticate } from './src/authentication/Authenticate'
+import { HomeStackScreen } from './src/navigation/router'
+
 import LoginScreen from './src/screens/Login/index.native'
 
 function App() {
-    const { onLogin, onAppleLogin, onLogout, isLoggedIn, onSignUp } = useAuthenticate()
+    const { onLogin, onAppleLogin, isLoggedIn, onSignUp } = useAuthenticate()
 
     if (isLoggedIn) {
         return (
-            <View style={styles.container}>
-                <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPress={onLogout}
-                    style={styles.logoutButton}
-                >
-                    <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Logg ut</Text>
-                </TouchableOpacity>
-            </View>
+            <NavigationContainer>
+                <HomeStackScreen />
+            </NavigationContainer>
         )
     }
     return <LoginScreen onAppleLogin={onAppleLogin} onLogin={onLogin} onSignUp={onSignUp} />
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    logoutButton: {
-        alignItems: 'center',
-        height: 60,
-        borderRadius: 8,
-        backgroundColor: 'red',
-        justifyContent: 'center',
-        fontSize: 20,
-        width: '90%',
-    },
-})
 
 export default App

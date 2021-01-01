@@ -47,6 +47,7 @@ const Inputs: FC<Props> = forwardRef(({ onLogin, onSignUp, isSignUp }, ref) => {
 
     useImperativeHandle(ref, () => ({
         clearInputs() {
+            // eslint-disable-next-line no-undef
             setTimeout(() => {
                 clearErrors()
                 setEmail('')
