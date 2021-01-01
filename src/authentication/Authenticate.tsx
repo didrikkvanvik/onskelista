@@ -3,6 +3,7 @@ import { StyleSheet, Text, Button } from 'react-native'
 import auth from '@react-native-firebase/auth'
 import { AppleButton } from '@invertase/react-native-apple-authentication'
 import { appleAuth } from '@invertase/react-native-apple-authentication'
+import { getStorage, setStorage } from './storage'
 
 type AppleSignInProps = { onPress: () => any }
 export function AppleSignIn({ onPress }: AppleSignInProps) {
@@ -66,10 +67,6 @@ function signUp(email: string, password: string) {
         })
 }
 
-const signOut = () => {
-    auth().signOut()
-}
-
 export async function onAppleButtonPress() {
     // Start the sign-in request
     const appleAuthRequestResponse = await appleAuth.performRequest({
@@ -94,13 +91,15 @@ export async function onAppleButtonPress() {
         })
 }
 
-export function useAuthenticate() {
+export function useAuthenticate(storage: any, updateStorage: any) {
     const [initializing, setInitializing] = useState(true)
-    const [user, setUser] = useState()
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
 
     function onAuthStateChanged(newUser: any) {
-        setUser(newUser)
+        updateStorage({
+            ...storage,
+            user: newUser,
+        })
         if (initializing) setInitializing(false)
     }
 
@@ -112,9 +111,18 @@ export function useAuthenticate() {
         }
     })
 
-    const onLogin = async (email: string, password: string) => {
-        const loggedInUser = await signInWithEmailAndPassword(email, password)
-        onAuthStateChanged(loggedInUser)
+    const onLogin = (email: string, password: string) => {
+        auth()
+            .signInWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
+            .then((loggedInUser) => {
+                onAuthStateChanged(loggedInUser)
+            })
+            .catch((error) => {
+                updateStorage({
+                    ...storage,
+                    loginError: error,
+                })
+            })
     }
 
     const onAppleLogin = () => {
@@ -122,17 +130,25 @@ export function useAuthenticate() {
     }
 
     const onLogout = () => {
-        signOut()
-        onAuthStateChanged(undefined)
+        auth()
+            .signOut()
+            .then(() => onAuthStateChanged(undefined))
     }
 
-    const onSignUp = async (email: string, password: string) => {
-        const loggedInUser = await signUp(email, password)
-        onAuthStateChanged(loggedInUser)
+    const onSignUp = (email: string, password: string) => {
+        auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(onAuthStateChanged)
+            .catch((error) => {
+                updateStorage({
+                    ...storage,
+                    signUpError: error,
+                })
+            })
     }
 
     return {
-        user,
+        user: storage?.user,
         onLogin,
         onAppleLogin,
         onLogout,

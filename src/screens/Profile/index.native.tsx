@@ -1,11 +1,14 @@
 import React, { FC, useEffect } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
+import { useAppContext } from '../../../App'
+
 import { colors } from '../../assets/styles/index.native'
 import { useAuthenticate } from '../../authentication/Authenticate'
 
 const Profile: FC<Props> = ({ navigation }) => {
-    const { onLogout } = useAuthenticate()
+    const { storage, updateStorage } = useAppContext()
+    const { onLogout } = useAuthenticate(storage, updateStorage)
 
     useEffect(() => {
         navigation.setOptions({ title: 'Min profil' })
