@@ -1,9 +1,16 @@
-import React, { FC, useState } from 'react'
+/* eslint-disable react/display-name */
+import React, { FC, forwardRef, useImperativeHandle, useState } from 'react'
 import { Text, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { Icon } from 'react-native-elements'
 
 import { colors } from '../../assets/styles/index.native'
+
+const defaultError = {
+    email: '',
+    password: '',
+    repeatPassword: '',
+}
 
 export type ErrorMessage = {
     email: string
@@ -32,23 +39,34 @@ function validateEmail(email: string): boolean {
     return re.test(String(email).toLowerCase())
 }
 
-const Inputs: FC<Props> = ({ onLogin, onSignUp, isSignUp, errors, setError }: Props) => {
+const Inputs: FC<Props> = forwardRef(({ onLogin, onSignUp, isSignUp }, ref) => {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [repeatPassword, setRepeatPassword] = useState<string>('')
+    const [errors, setError] = useState<ErrorMessage>(defaultError)
+
+    useImperativeHandle(ref, () => ({
+        clearInputs() {
+            setTimeout(() => {
+                clearErrors()
+                setEmail('')
+                setPassword('')
+                setRepeatPassword('')
+            }, 350)
+        },
+    }))
 
     const login = () => {
         onLogin(email, password)
     }
 
-    const clearError = () => {
+    const clearErrors = () => {
         setError({
             email: '',
             password: '',
             repeatPassword: '',
         })
     }
-
     const signUp = () => {
         if (!validateEmail(email)) {
             setError({
@@ -70,28 +88,29 @@ const Inputs: FC<Props> = ({ onLogin, onSignUp, isSignUp, errors, setError }: Pr
         }
     }
 
-    const updateUserName = (text: string) => {
-        clearError()
+    const updateEmail = (text: string) => {
+        clearErrors()
         setEmail(text)
     }
 
     const updatePassword = (text: string) => {
-        clearError()
+        clearErrors()
         setPassword(text)
     }
 
     const updateRepeatPassword = (text: string) => {
-        clearError()
+        clearErrors()
         setRepeatPassword(text)
     }
 
     return (
         <>
             <TextInput
-                onChangeText={updateUserName}
+                onChangeText={updateEmail}
                 placeholder="Epost"
                 placeholderTextColor={colors.brand.gray}
                 style={[styles.textInput, styles.shadow, errors.email ? styles.errorTextField : {}]}
+                value={email}
             />
 
             <TextInput
@@ -103,6 +122,7 @@ const Inputs: FC<Props> = ({ onLogin, onSignUp, isSignUp, errors, setError }: Pr
                     styles.shadow,
                     errors.password ? styles.errorTextField : {},
                 ]}
+                value={password}
             />
 
             {isSignUp && (
@@ -115,6 +135,7 @@ const Inputs: FC<Props> = ({ onLogin, onSignUp, isSignUp, errors, setError }: Pr
                         styles.shadow,
                         errors.repeatPassword ? styles.errorTextField : {},
                     ]}
+                    value={repeatPassword}
                 />
             )}
             {renderError(errors)}
@@ -130,7 +151,7 @@ const Inputs: FC<Props> = ({ onLogin, onSignUp, isSignUp, errors, setError }: Pr
             </Animated.View>
         </>
     )
-}
+})
 
 const styles = StyleSheet.create({
     loginText: {
@@ -183,8 +204,6 @@ type Props = {
     onLogin: (email: string, password: string) => void
     onSignUp: (email: string, password: string, repeatPassword: string) => void
     isSignUp: boolean
-    errors: ErrorMessage
-    setError: (errors: ErrorMessage) => void
 }
 
 export default Inputs

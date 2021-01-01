@@ -13,7 +13,7 @@ import { TapGestureHandler, State as GestureState } from 'react-native-gesture-h
 
 import { AppleSignIn } from '../../authentication/Authenticate'
 import { runTiming, DEFAULT_HEIGHT } from './helper'
-import Inputs, { ErrorMessage } from './Inputs'
+import Inputs from './Inputs'
 
 const { width, height } = Dimensions.get('window')
 const { Value, event, block, cond, eq, set, Clock, interpolate, Extrapolate, concat } = Animated
@@ -35,11 +35,6 @@ class LoginScreen extends Component<Props, State> {
 
         this.state = {
             isSignUp: false,
-            errors: {
-                email: '',
-                password: '',
-                repeatPassword: '',
-            },
         }
 
         this.buttonOpacity = new Value(1)
@@ -103,6 +98,13 @@ class LoginScreen extends Component<Props, State> {
             outputRange: [180, 360],
             extrapolate: Extrapolate.CLAMP,
         })
+
+        this.inputRef = React.createRef()
+    }
+
+    onClose = () => {
+        this.setState({ isSignUp: false })
+        this.inputRef.current.clearInputs()
     }
 
     renderBackground = () => (
@@ -148,11 +150,7 @@ class LoginScreen extends Component<Props, State> {
     renderCloseButton = () => (
         <TapGestureHandler onHandlerStateChange={this.onCloseState}>
             <Animated.View style={[styles.closeButton, styles.shadow]}>
-                <TouchableOpacity
-                    onPress={() =>
-                        this.setState({ isSignUp: false, errors: { email: '', password: '' } })
-                    }
-                >
+                <TouchableOpacity onPress={this.onClose}>
                     <Animated.Text
                         style={{
                             fontSize: 15,
@@ -196,7 +194,7 @@ class LoginScreen extends Component<Props, State> {
 
     render() {
         const { onAppleLogin } = this.props
-        const { errors, isSignUp } = this.state
+        const { isSignUp } = this.state
 
         return (
             <KeyboardAvoidingView behavior="padding" enabled style={styles.keyboardAvoidingView}>
@@ -229,11 +227,10 @@ class LoginScreen extends Component<Props, State> {
                         {this.renderCloseButton()}
 
                         <Inputs
-                            errors={errors}
                             isSignUp={isSignUp}
                             onLogin={this.signIn}
                             onSignUp={this.signUp}
-                            setError={(errorMessage) => this.setState({ errors: errorMessage })}
+                            ref={this.inputRef}
                         />
                     </Animated.View>
                 </View>
@@ -317,7 +314,6 @@ type Props = {
 }
 
 type State = {
-    errors: ErrorMessage
     isSignUp: boolean
 }
 
