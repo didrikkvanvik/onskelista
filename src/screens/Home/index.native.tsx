@@ -1,22 +1,38 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { useAppContext } from '../../../App'
 
 import { colors } from '../../assets/styles/index.native'
-
+import Button from '../../components/Button/index.native'
 import Text from '../../components/Text/index.native'
+
+import Carousel from './Carousel'
+import NewListModal from './NewListModal'
+import Page from './Page'
+
+const pages = [
+    {
+        header: 'Velkommen til Oppskrifter',
+        text: 'Tinder for mat oppskrifter',
+    },
+    {
+        header: 'Oppdag nye oppskrifter',
+        text: 'Heihei',
+    },
+]
 
 const Home: FC<Props> = ({ navigation }) => {
     const { storage } = useAppContext()
-    console.log('storage', storage)
+    const [isNewListModalVisible, setIsNewListModalVisible] = useState<boolean>(false)
 
     const navigateToProfile = () => {
         navigation.navigate('Profile')
     }
 
-    const createList = () => {
-        console.log('create list')
+    const createList = (type: 'group' | 'single') => {
+        console.log('type', type)
+        navigation.navigate('CreateList', { type })
     }
 
     const renderUserButton = () => (
@@ -29,20 +45,35 @@ const Home: FC<Props> = ({ navigation }) => {
         </TouchableOpacity>
     )
 
+    const renderWelcomeHeader = () => (
+        <>
+            <Text style={styles.headerText}>Hei Didrik Kvanvik!</Text>
+            <Text style={styles.headerLabel}>Ha en god stemning</Text>
+            <Text style={styles.headerLabel}>Du har 5 ønskelister</Text>
+        </>
+    )
+    const views = pages.map(({ header, text }) => <Page header={header} key={header} text={text} />)
+
     return (
         <View style={styles.container}>
             {renderUserButton()}
-            <Text style={styles.headerText}>Hei Didrik Kvanvik</Text>
-            <Text style={styles.headerLabel}>Ha en god stemning</Text>
-            <Text style={styles.headerLabel}>Du har 5 ønskelister</Text>
 
-            <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={createList}
+            {renderWelcomeHeader()}
+
+            <Button
+                onPress={() => setIsNewListModalVisible(true)}
                 style={styles.createListButton}
+                useShadow
+                variant="midnight"
             >
-                <Icon color={colors.black} name="plus" size={32} type="antdesign" />
-            </TouchableOpacity>
+                <Icon color={colors.brand.blue} name="plus" size={32} type="antdesign" />
+            </Button>
+
+            <NewListModal
+                isVisible={isNewListModalVisible}
+                onClose={() => setIsNewListModalVisible(false)}
+                onPress={createList}
+            />
         </View>
     )
 }
@@ -50,25 +81,13 @@ const Home: FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: colors.white,
         paddingTop: 100,
-        paddingHorizontal: 20,
     },
     createListButton: {
-        alignItems: 'center',
         height: 120,
-        borderRadius: 6,
-        backgroundColor: colors.white,
-        justifyContent: 'center',
-        fontSize: 20,
         width: 120,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.6,
-        shadowColor: 'rgba(0,0,0,0.3)',
-        marginTop: 30,
+        marginHorizontal: 0,
     },
     headerText: {
         fontSize: 24,
