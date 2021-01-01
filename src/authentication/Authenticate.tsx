@@ -38,11 +38,24 @@ const signInAnonymously = (onResult) => {
         })
 }
 
-function signInWithEmailAndPassword(username: string, password: string) {
-    // username : jane.doe@example.com
+function signInWithEmailAndPassword(email: string, password: string) {
+    // email : jane.doe@example.com
     // password: SuperSecretPassword!
     auth()
         .signInWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
+        .then((user) => {
+            console.log('User account signed in!', user)
+            return user
+        })
+        .catch((error) => {
+            console.error('error', error)
+            return undefined
+        })
+}
+
+function signUp(email: string, password: string) {
+    auth()
+        .createUserWithEmailAndPassword(email, password)
         .then((user) => {
             console.log('User account created & signed in!', user)
             return user
@@ -99,8 +112,8 @@ export function useAuthenticate() {
         }
     })
 
-    const onLogin = async (username: string, password: string) => {
-        const loggedInUser = await signInWithEmailAndPassword(username, password)
+    const onLogin = async (email: string, password: string) => {
+        const loggedInUser = await signInWithEmailAndPassword(email, password)
         onAuthStateChanged(loggedInUser)
     }
 
@@ -113,10 +126,9 @@ export function useAuthenticate() {
         onAuthStateChanged(undefined)
     }
 
-    const onSignUp = (username: string, password: string) => {
-        console.log('signup with', username, password)
-        // const loggedInUser = await signInWithEmailAndPassword(username, password)
-        // onAuthStateChanged(loggedInUser)
+    const onSignUp = async (email: string, password: string) => {
+        const loggedInUser = await signUp(email, password)
+        onAuthStateChanged(loggedInUser)
     }
 
     return {

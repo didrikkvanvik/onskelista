@@ -1,57 +1,87 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { Text, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { Icon } from 'react-native-elements'
 
 import { colors } from '../../assets/styles/index.native'
 
-const renderError = (errorMessage?: string) => {
-    if (!errorMessage) return <View style={{ height: 24 }} />
+export type ErrorMessage = {
+    email: string
+    password: string
+    repeatPassword: string
+}
+const renderError = (errorMessage: ErrorMessage) => {
+    if (!errorMessage.email && !errorMessage.password && !errorMessage.repeatPassword) {
+        return <View style={{ height: 24 }} />
+    }
+
     return (
-        <View style={styles.error}>
+        <View style={styles.errors}>
             <Icon color={colors.error} name="error" size={16} type="materialicons" />
-            <Text style={styles.errorText}>{errorMessage}</Text>
+            <Text style={styles.errorText}>
+                {errorMessage.email || errorMessage.password || errorMessage.repeatPassword}
+            </Text>
         </View>
     )
 }
 
 function validateEmail(email: string): boolean {
+    if (!email.length) return false
     // eslint-disable-next-line max-len
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     return re.test(String(email).toLowerCase())
 }
 
-const Inputs: FC<Props> = ({ onLogin, onSignUp, isSignUp, error, setError }: Props) => {
-    const [username, setUsername] = useState<string>('')
+const Inputs: FC<Props> = ({ onLogin, onSignUp, isSignUp, errors, setError }: Props) => {
+    const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [repeatPassword, setRepeatPassword] = useState<string>('')
 
     const login = () => {
-        onLogin(username, password)
+        onLogin(email, password)
+    }
+
+    const clearError = () => {
+        setError({
+            email: '',
+            password: '',
+            repeatPassword: '',
+        })
     }
 
     const signUp = () => {
-        if (!validateEmail(username)) {
-            setError('Emailen er ikke gyldig')
+        if (!validateEmail(email)) {
+            setError({
+                ...errors,
+                email: 'Emailen er ikke gyldig',
+            })
+        } else if (password.length < 8) {
+            setError({
+                ...errors,
+                password: 'Passorder må være over 8 tegn',
+            })
         } else if (password.length && password !== repeatPassword) {
-            setError('Passordene er ikke like')
+            setError({
+                ...errors,
+                repeatPassword: 'Passordene er ikke like',
+            })
         } else {
-            onSignUp(username, password, repeatPassword)
+            onSignUp(email, password, repeatPassword)
         }
     }
 
     const updateUserName = (text: string) => {
-        setError('')
-        setUsername(text)
+        clearError()
+        setEmail(text)
     }
 
     const updatePassword = (text: string) => {
-        setError('')
+        clearError()
         setPassword(text)
     }
 
     const updateRepeatPassword = (text: string) => {
-        setError('')
+        clearError()
         setRepeatPassword(text)
     }
 
@@ -61,14 +91,18 @@ const Inputs: FC<Props> = ({ onLogin, onSignUp, isSignUp, error, setError }: Pro
                 onChangeText={updateUserName}
                 placeholder="Epost"
                 placeholderTextColor={colors.brand.gray}
-                style={[styles.textInput, styles.shadow]}
+                style={[styles.textInput, styles.shadow, errors.email ? styles.errorTextField : {}]}
             />
 
             <TextInput
                 onChangeText={updatePassword}
                 placeholder="Passord"
                 placeholderTextColor={colors.brand.gray}
-                style={[styles.textInput, styles.shadow]}
+                style={[
+                    styles.textInput,
+                    styles.shadow,
+                    errors.password ? styles.errorTextField : {},
+                ]}
             />
 
             {isSignUp && (
@@ -76,10 +110,14 @@ const Inputs: FC<Props> = ({ onLogin, onSignUp, isSignUp, error, setError }: Pro
                     onChangeText={updateRepeatPassword}
                     placeholder="Gjenta passord"
                     placeholderTextColor={colors.brand.gray}
-                    style={[styles.textInput, styles.shadow, error ? styles.errorTextField : {}]}
+                    style={[
+                        styles.textInput,
+                        styles.shadow,
+                        errors.repeatPassword ? styles.errorTextField : {},
+                    ]}
                 />
             )}
-            {renderError(error)}
+            {renderError(errors)}
 
             <Animated.View>
                 <TouchableOpacity
@@ -128,7 +166,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.6,
         shadowColor: 'rgba(0,0,0,0.3)',
     },
-    error: {
+    errors: {
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'row',
@@ -142,11 +180,11 @@ const styles = StyleSheet.create({
 })
 
 type Props = {
-    onLogin: (username: string, password: string) => void
-    onSignUp: (username: string, password: string, repeatPassword: string) => void
+    onLogin: (email: string, password: string) => void
+    onSignUp: (email: string, password: string, repeatPassword: string) => void
     isSignUp: boolean
-    error: string
-    setError: (error: string) => void
+    errors: ErrorMessage
+    setError: (errors: ErrorMessage) => void
 }
 
 export default Inputs

@@ -13,7 +13,7 @@ import { TapGestureHandler, State as GestureState } from 'react-native-gesture-h
 
 import { AppleSignIn } from '../../authentication/Authenticate'
 import { runTiming, DEFAULT_HEIGHT } from './helper'
-import Inputs from './Inputs'
+import Inputs, { ErrorMessage } from './Inputs'
 
 const { width, height } = Dimensions.get('window')
 const { Value, event, block, cond, eq, set, Clock, interpolate, Extrapolate, concat } = Animated
@@ -35,7 +35,11 @@ class LoginScreen extends Component<Props, State> {
 
         this.state = {
             isSignUp: false,
-            error: '',
+            errors: {
+                email: '',
+                password: '',
+                repeatPassword: '',
+            },
         }
 
         this.buttonOpacity = new Value(1)
@@ -144,7 +148,11 @@ class LoginScreen extends Component<Props, State> {
     renderCloseButton = () => (
         <TapGestureHandler onHandlerStateChange={this.onCloseState}>
             <Animated.View style={[styles.closeButton, styles.shadow]}>
-                <TouchableOpacity onPress={() => this.setState({ isSignUp: false, error: '' })}>
+                <TouchableOpacity
+                    onPress={() =>
+                        this.setState({ isSignUp: false, errors: { email: '', password: '' } })
+                    }
+                >
                     <Animated.Text
                         style={{
                             fontSize: 15,
@@ -178,17 +186,17 @@ class LoginScreen extends Component<Props, State> {
         </TapGestureHandler>
     )
 
-    signIn = (username: string, password: string) => {
-        this.props.onLogin(username, password)
+    signIn = (email: string, password: string) => {
+        this.props.onLogin(email, password)
     }
 
-    signUp = (username: string, password: string) => {
-        this.props.onSignUp(username, password)
+    signUp = (email: string, password: string) => {
+        this.props.onSignUp(email, password)
     }
 
     render() {
         const { onAppleLogin } = this.props
-        const { error, isSignUp } = this.state
+        const { errors, isSignUp } = this.state
 
         return (
             <KeyboardAvoidingView behavior="padding" enabled style={styles.keyboardAvoidingView}>
@@ -221,13 +229,11 @@ class LoginScreen extends Component<Props, State> {
                         {this.renderCloseButton()}
 
                         <Inputs
-                            error={error}
+                            errors={errors}
                             isSignUp={isSignUp}
                             onLogin={this.signIn}
                             onSignUp={this.signUp}
-                            setError={(errorMessage: string) =>
-                                this.setState({ error: errorMessage })
-                            }
+                            setError={(errorMessage) => this.setState({ errors: errorMessage })}
                         />
                     </Animated.View>
                 </View>
@@ -247,7 +253,6 @@ const styles = StyleSheet.create({
     },
     inputView: {
         height: ANIMATION_HEIGHT,
-        top: null,
         justifyContent: 'center',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
@@ -306,13 +311,13 @@ const styles = StyleSheet.create({
 })
 
 type Props = {
-    onLogin: (username: string, password: string) => void
+    onLogin: (email: string, password: string) => void
     onAppleLogin: () => void
-    onSignUp: (username: string, password: string) => void
+    onSignUp: (email: string, password: string) => void
 }
 
 type State = {
-    error: string
+    errors: ErrorMessage
     isSignUp: boolean
 }
 
