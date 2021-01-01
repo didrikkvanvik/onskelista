@@ -1,10 +1,11 @@
 import React, { FC, useEffect } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import { useAppContext } from '../../../App'
 
 import { colors } from '../../assets/styles/index.native'
 import { useAuthenticate } from '../../authentication/Authenticate'
+import Text from '../../components/Text/index.native'
 
 const Profile: FC<Props> = ({ navigation }) => {
     const { storage, updateStorage } = useAppContext()

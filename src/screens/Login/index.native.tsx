@@ -1,23 +1,17 @@
 import React, { Component } from 'react'
-import {
-    View,
-    Text,
-    StyleSheet,
-    Dimensions,
-    KeyboardAvoidingView,
-    TouchableOpacity,
-} from 'react-native'
+import { View, StyleSheet, Dimensions, KeyboardAvoidingView, TouchableOpacity } from 'react-native'
 import Svg, { Image, Circle, ClipPath } from 'react-native-svg'
 import Animated from 'react-native-reanimated'
 import { TapGestureHandler, State as GestureState } from 'react-native-gesture-handler'
 import * as Animatable from 'react-native-animatable'
 
-const MyCustomComponent = Animatable.createAnimatableComponent(KeyboardAvoidingView)
-
+import Text from '../../components/Text/index.native'
 import { AppleSignIn } from '../../authentication/Authenticate'
+
 import { runTiming, DEFAULT_HEIGHT } from './helper'
 import Inputs from './Inputs'
 
+const MyCustomComponent = Animatable.createAnimatableComponent(KeyboardAvoidingView)
 const { width, height } = Dimensions.get('window')
 const { Value, event, block, cond, eq, set, Clock, interpolate, Extrapolate, concat } = Animated
 const ANIMATION_HEIGHT = height / 2.4
