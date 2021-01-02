@@ -23,7 +23,7 @@ function NewListModal({ isVisible, onPress, onClose }: Props) {
                     variant="midnight"
                 />
                 <Button
-                    label="Liste"
+                    label="Ønskeliste"
                     onPress={() => press('single')}
                     style={styles.button}
                     useShadow

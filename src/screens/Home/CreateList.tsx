@@ -25,20 +25,23 @@ const CreateList: FC<Props> = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>Navn på gruppen</Text>
+            <Text style={styles.label}>{`Navn på ${isGroup ? 'gruppen' : 'ønskelista'}`}</Text>
 
             <TextInput
                 onChangeText={setName}
-                placeholder="Secret santa"
+                placeholder={isGroup ? 'Secret santa' : 'Bursdagsgaver'}
                 placeholderTextColor={colors.brand.gray}
                 style={[styles.textInput, styles.shadow]}
                 value={name}
             />
-            <Text style={styles.label}>Beskriv formålet med ønskelista:</Text>
+            <Text style={styles.label}>
+                {`Beskriv formålet med ${isGroup ? 'gruppen' : 'ønskelista'}:`}
+            </Text>
+
             <TextInput
                 multiline
                 onChangeText={setDescription}
-                placeholder="Dele glede med familien"
+                placeholder={isGroup ? 'Dele glede med familien' : 'Gaver til min bursdag'}
                 placeholderTextColor={colors.brand.gray}
                 style={[styles.textInput, styles.largeTextInput, styles.shadow]}
                 value={description}

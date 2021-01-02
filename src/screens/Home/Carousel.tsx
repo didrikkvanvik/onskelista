@@ -82,7 +82,7 @@ function Carousel({ onLastPage, views, onPress }: Props, ref: any) {
                 <Svg
                     height={8}
                     style={{ backgroundColor: 'red' }}
-                    viewBox={`0 0 ${2 * DISTANCE_BETWEEN} 0`}
+                    viewBox={`0 0 ${2 * DISTANCE_BETWEEN} ${2 * DISTANCE_BETWEEN}`}
                     width="100%"
                 >
                     <AnimatedLine

@@ -1,26 +1,14 @@
 import React, { FC, useState } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
-import { useAppContext } from '../../../App'
+import LottieView from 'lottie-react-native'
 
 import { colors } from '../../assets/styles/index.native'
 import Button from '../../components/Button/index.native'
 import Text from '../../components/Text/index.native'
+import { useAppContext } from '../../../App'
 
-import Carousel from './Carousel'
 import NewListModal from './NewListModal'
-import Page from './Page'
-
-const pages = [
-    {
-        header: 'Velkommen til Oppskrifter',
-        text: 'Tinder for mat oppskrifter',
-    },
-    {
-        header: 'Oppdag nye oppskrifter',
-        text: 'Heihei',
-    },
-]
 
 const Home: FC<Props> = ({ navigation }) => {
     const { storage } = useAppContext()
@@ -52,13 +40,44 @@ const Home: FC<Props> = ({ navigation }) => {
             <Text style={styles.headerLabel}>Du har 5 ønskelister</Text>
         </>
     )
-    const views = pages.map(({ header, text }) => <Page header={header} key={header} text={text} />)
+
+    const peopleAnimation = (source) => (
+        <LottieView
+            autoPlay
+            loop
+            // eslint-disable-next-line no-undef
+            source={source}
+            style={styles.animation}
+        />
+    )
 
     return (
         <View style={styles.container}>
             {renderUserButton()}
 
             {renderWelcomeHeader()}
+            <View style={styles.cards}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('Friends')}
+                    style={styles.card}
+                >
+                    {peopleAnimation(require('../../assets/animations/people.json'))}
+                    <Text>Venner</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('WishLists')}
+                    style={styles.card}
+                >
+                    {peopleAnimation(require('../../assets/animations/wishlists.json'))}
+                    <Text>Ønskelister</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => navigation.navigate('Groups')} style={styles.card}>
+                    {peopleAnimation(require('../../assets/animations/groups.json'))}
+                    <Text>Grupper</Text>
+                </TouchableOpacity>
+            </View>
 
             <Button
                 onPress={() => setIsNewListModalVisible(true)}
@@ -83,11 +102,20 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: colors.white,
         paddingTop: 100,
+        paddingHorizontal: 20,
+    },
+    cards: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        flexWrap: 'wrap',
     },
     createListButton: {
-        height: 120,
-        width: 120,
-        marginHorizontal: 0,
+        height: 60,
+        width: 60,
+        borderRadius: 100,
+        position: 'absolute',
+        bottom: 30,
+        left: Dimensions.get('window').width / 2 - 30,
     },
     headerText: {
         fontSize: 24,
@@ -104,6 +132,30 @@ const styles = StyleSheet.create({
         right: 20,
         position: 'absolute',
         top: 50,
+    },
+    card: {
+        height: 170,
+        width: 140,
+        paddingTop: 10,
+        alignItems: 'center',
+        backgroundColor: colors.white,
+        elevation: 2,
+        shadowColor: colors.shadow,
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.6,
+        shadowRadius: 3,
+        marginTop: 30,
+        borderWidth: 2,
+        borderRadius: 4,
+        borderColor: colors.white,
+    },
+    animation: {
+        height: 100,
+        maxWidth: 130,
+        marginBottom: 16,
     },
 })
 
