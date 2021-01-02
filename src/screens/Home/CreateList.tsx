@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
+import { useAppContext } from '../../../App'
 
 import { colors } from '../../assets/styles/index.native'
 import Button from '../../components/Button/index.native'
@@ -11,8 +12,10 @@ function getTitle(type: 'group' | 'single'): string {
     return type === 'group' ? 'Ønskegruppe' : 'ØnskeListe'
 }
 const CreateList: FC<Props> = ({ navigation, route }) => {
+    const { storage } = useAppContext()
     const [name, setName] = useState<string>('')
     const [description, setDescription] = useState<string>('')
+    const currentUserId = storage?.user?.user?.uid
 
     const { type } = route.params
     const isGroup = type === 'group'
@@ -22,7 +25,8 @@ const CreateList: FC<Props> = ({ navigation, route }) => {
     }, [])
 
     const create = () => {
-        createGroup(name, description, [], [])
+        createGroup({ admin: currentUserId, name, description })
+        navigation.goBack()
     }
 
     return (

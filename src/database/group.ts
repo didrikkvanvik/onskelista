@@ -4,18 +4,21 @@ import { Group } from '../types/index'
 
 const GROUP_PREFIX = 'group'
 
-export const createGroup = (
-    name: string,
-    description: string,
-    userIds?: string[],
-    wishlists?: any[],
-) => {
+type CreateGroup = {
+    admin: string
+    name: string
+    description: string
+}
+export const createGroup = ({ admin, name, description }: CreateGroup) => {
     const groupRef = db.database().ref(GROUP_PREFIX)
     const newGroupRef = groupRef.push()
+
     const group: Group = {
+        admin,
         name,
+        group_id: 'random gruppe id',
         description,
-        user_ids: [],
+        user_ids: [admin],
         wish_lists: [],
     }
 

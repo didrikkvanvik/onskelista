@@ -21,8 +21,8 @@ export type Group = {
     group_id: string
     name: string
     description: string
-    user_ids: any[]
-    wish_lists: any[]
+    user_ids: string[]
+    wish_lists: WishList[]
 }
 
 export type User = {
