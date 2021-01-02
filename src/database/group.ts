@@ -1,6 +1,7 @@
 import db from './config'
 
 import { Group } from '../types/index'
+import { uuid } from '../utils/uuid'
 
 const GROUP_PREFIX = 'groups'
 
@@ -16,7 +17,7 @@ export const createGroup = ({ admin, name, description }: CreateGroup) => {
     const group: Group = {
         admin,
         name,
-        group_id: 'random gruppe id',
+        group_id: uuid(),
         description,
         user_ids: [admin],
         wish_lists: [],

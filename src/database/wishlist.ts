@@ -1,4 +1,5 @@
 import { WishList } from '../types/index'
+import { uuid } from '../utils/uuid'
 
 import db from './config'
 
@@ -16,7 +17,7 @@ export const createWishList = ({ userId, name, description }: CreateWishList) =>
 
     const wishList: WishList = {
         user_id: userId,
-        wish_list_id: 'random wish list id',
+        wish_list_id: uuid(),
         name,
         description,
         items: [],
