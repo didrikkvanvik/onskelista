@@ -6,3 +6,7 @@ export function uuid() {
         return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16)
     })
 }
+
+export function getUserUidFromStorage(storage: any): string {
+    return storage?.user?.user?.uid
+}

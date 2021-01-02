@@ -1,7 +1,7 @@
 import { User } from '../types/index'
 import db from './config'
 
-const USER_PREFIX = 'users'
+const USER_PREFIX = '/users'
 const VALUE = 'value'
 
 type CreateUser = {
@@ -11,18 +11,15 @@ type CreateUser = {
     password: string
 }
 export const createUser = ({ userId, name, email, password }: CreateUser) => {
-    const userRef = db.database().ref(USER_PREFIX)
-    const newUserRef = userRef.push()
-
+    db.database().ref(USER_PREFIX).push()
     const user: User = {
-        user_id: userId,
         name,
         email,
         password,
         wish_lists: [],
     }
 
-    newUserRef.set(user)
+    db.database().ref(USER_PREFIX).child(userId).set(user)
 }
 
 export const getUsers = async () => {
@@ -35,12 +32,23 @@ export const getUsers = async () => {
     return wishLists
 }
 
-export const getUser = async (id: string) => {
+export const getUserById = async (id: string) => {
     const wishList = await db
         .database()
         .ref(`${USER_PREFIX}/${id}`)
         .once(VALUE)
         .then((snapshot) => snapshot.val())
+
+    return wishList
+}
+
+export const updateUserDisplayName = async (id: string, displayName: string) => {
+    const wishList = await db
+        .database()
+        .ref(`${USER_PREFIX}/${id}`)
+        .update({ name: displayName })
+        .then(() => console.log('done'))
+        .catch((e) => console.log('set error', e))
 
     return wishList
 }

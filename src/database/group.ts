@@ -3,7 +3,7 @@ import db from './config'
 import { Group } from '../types/index'
 import { uuid } from '../utils/uuid'
 
-const GROUP_PREFIX = 'groups'
+const GROUP_PREFIX = '/groups'
 
 type CreateGroup = {
     admin: string
@@ -11,19 +11,15 @@ type CreateGroup = {
     description: string
 }
 export const createGroup = ({ admin, name, description }: CreateGroup) => {
-    const groupRef = db.database().ref(GROUP_PREFIX)
-    const newGroupRef = groupRef.push()
-
     const group: Group = {
         admin,
         name,
-        group_id: uuid(),
         description,
         user_ids: [admin],
         wish_lists: [],
     }
 
-    newGroupRef.set(group)
+    db.database().ref(GROUP_PREFIX).child(uuid()).set(group)
 }
 
 export const getGroups = async () => {

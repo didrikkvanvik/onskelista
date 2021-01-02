@@ -3,17 +3,19 @@ import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import LottieView from 'lottie-react-native'
 
+import { useAppContext } from '../../../App'
+
 import { colors } from '../../assets/styles/index.native'
 import Button from '../../components/Button/index.native'
 import Text from '../../components/Text/index.native'
-import { useAppContext } from '../../../App'
-
 import NewListModal from './NewListModal'
 
 console.disableYellowBox = true
 
 const Home: FC<Props> = ({ navigation }) => {
-    const { storage } = useAppContext()
+    const { user = {} } = useAppContext()
+    const displayName = user?._user?.displayName || ''
+
     const [isNewListModalVisible, setIsNewListModalVisible] = useState<boolean>(false)
 
     const navigateToProfile = () => {
@@ -36,13 +38,13 @@ const Home: FC<Props> = ({ navigation }) => {
 
     const renderWelcomeHeader = () => (
         <>
-            <Text style={styles.headerText}>Hei Didrik Kvanvik!</Text>
+            <Text style={styles.headerText}>{`Hei ${displayName}`}</Text>
             <Text style={styles.headerLabel}>Ha en god stemning</Text>
             <Text style={styles.headerLabel}>Du har 5 ønskelister</Text>
         </>
     )
 
-    const peopleAnimation = (source) => (
+    const peopleAnimation = (source: any) => (
         <LottieView
             autoPlay
             loop

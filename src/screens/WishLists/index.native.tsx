@@ -1,13 +1,21 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-
 import { useAppContext } from '../../../App'
 
 import { colors } from '../../assets/styles/index.native'
 import Text from '../../components/Text/index.native'
+import { getWishListsForUser } from '../../database/wishlist'
+import { WishList } from '../../types'
+import { getUserUidFromStorage } from '../../utils/uuid'
 
 const WishLists: FC<Props> = ({ navigation }) => {
-    const { storage, updateStorage } = useAppContext()
+    const { storage } = useAppContext()
+    const userId = getUserUidFromStorage(storage)
+    const [wishLists, setWishLists] = useState<WishList[]>([])
+
+    useEffect(() => {
+        getWishListsForUser(userId).then(setWishLists)
+    }, [])
 
     useEffect(() => {
         navigation.setOptions({ title: 'Ønskelister' })

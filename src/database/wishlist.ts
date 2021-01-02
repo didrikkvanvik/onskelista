@@ -3,7 +3,7 @@ import { uuid } from '../utils/uuid'
 
 import db from './config'
 
-const WISH_LIST_PREFIX = 'wishlists'
+const WISH_LIST_PREFIX = '/wishlists'
 const VALUE = 'value'
 
 type CreateWishList = {
@@ -12,18 +12,14 @@ type CreateWishList = {
     description: string
 }
 export const createWishList = ({ userId, name, description }: CreateWishList) => {
-    const wishListRef = db.database().ref(WISH_LIST_PREFIX)
-    const newWishListRef = wishListRef.push()
-
     const wishList: WishList = {
         user_id: userId,
-        wish_list_id: uuid(),
         name,
         description,
         items: [],
     }
 
-    newWishListRef.set(wishList)
+    db.database().ref(WISH_LIST_PREFIX).child(uuid()).set(wishList)
 }
 
 export const getWishLists = async () => {
@@ -31,7 +27,24 @@ export const getWishLists = async () => {
         .database()
         .ref(WISH_LIST_PREFIX)
         .once(VALUE)
-        .then((snapshot) => snapshot.val())
+        .then((snapshot) => {
+            const result = snapshot.val()
+            return Object.values(result)
+        })
+
+    return wishLists
+}
+
+export const getWishListsForUser = async (userId: string) => {
+    const wishLists = await db
+        .database()
+        .ref(WISH_LIST_PREFIX)
+        .once(VALUE)
+        .then((snapshot) => {
+            const result = snapshot.val()
+            const values = Object.values(result) as WishList[]
+            return values.filter((list) => list?.user_id === userId)
+        })
 
     return wishLists
 }

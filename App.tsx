@@ -18,12 +18,15 @@ export const useAppContext = (): any => useContext(AppContext)
 
 function App() {
     const [storage, updateStorage] = useStorage()
-    const { onLogin, onAppleLogin, isLoggedIn, onSignUp } = useAuthenticate(storage, updateStorage)
+    const { onLogin, onAppleLogin, isLoggedIn, onSignUp, user } = useAuthenticate(
+        storage,
+        updateStorage,
+    )
 
     if (isLoggedIn) {
         return (
             <NavigationContainer>
-                <AppContext.Provider value={{ storage, updateStorage }}>
+                <AppContext.Provider value={{ storage, updateStorage, user }}>
                     <HomeStackScreen />
                 </AppContext.Provider>
             </NavigationContainer>

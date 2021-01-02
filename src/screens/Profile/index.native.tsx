@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import { useAppContext } from '../../../App'
@@ -6,19 +6,27 @@ import { useAppContext } from '../../../App'
 import { colors } from '../../assets/styles/index.native'
 import { useAuthenticate } from '../../authentication/Authenticate'
 import Text from '../../components/Text/index.native'
+import { getUserById, updateUserDisplayName } from '../../database/user'
 
 const Profile: FC<Props> = ({ navigation }) => {
-    const { storage, updateStorage } = useAppContext()
+    const { storage, updateStorage, user } = useAppContext()
     const { onLogout } = useAuthenticate(storage, updateStorage)
 
-    useEffect(() => {
-        navigation.setOptions({ title: 'Min profil' })
-    }, [])
+    const updateName = async () => {
+        const id = user?._user?.uid
+        // getUserById(id).then((res) => console.log('res', res))
+        updateUserDisplayName(id, 'Didrik')
+        // const user = await auth().currentUser
+        // auth().currentUser.updateProfile({ displayName: 'Per' })
+    }
 
     return (
         <View style={styles.container}>
             <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 100 }}>PROFILEN MIIIN</Text>
-            <TouchableOpacity activeOpacity={0.8} onPress={onLogout} style={styles.logoutButton}>
+            <TouchableOpacity activeOpacity={0.6} onPress={updateName} style={styles.logoutButton}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Oppdater navn</Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.6} onPress={onLogout} style={styles.logoutButton}>
                 <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Logg ut</Text>
             </TouchableOpacity>
         </View>
@@ -39,6 +47,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         justifyContent: 'center',
         fontSize: 20,
+        marginBottom: 20,
         width: '90%',
         shadowOffset: {
             width: 0,

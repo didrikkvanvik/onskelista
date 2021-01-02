@@ -5,14 +5,12 @@ export const STORAGE_PREFIX = 'onskeliste:'
 
 export const defaultStorage = {
     loginError: undefined,
-    user: undefined,
     signUpError: undefined,
 }
 
 export interface Storage {
     loginError: any
     signUpError: any
-    user: any
 }
 
 export async function getStorage(): Promise<any> {
