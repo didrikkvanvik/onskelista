@@ -2,7 +2,7 @@ import db from './config'
 
 import { Group } from '../types/index'
 
-const GROUP_PREFIX = 'group'
+const GROUP_PREFIX = 'groups'
 
 type CreateGroup = {
     admin: string

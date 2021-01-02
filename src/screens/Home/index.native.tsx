@@ -21,7 +21,7 @@ const Home: FC<Props> = ({ navigation }) => {
     }
 
     const createList = (type: 'group' | 'single') => {
-        navigation.navigate('CreateList', { type })
+        navigation.navigate(type === 'group' ? 'CreateGroup' : 'CreateWishList', { type })
     }
 
     const renderUserButton = () => (

@@ -5,12 +5,18 @@ import db from './config'
 const WISH_LIST_PREFIX = 'wishlists'
 const VALUE = 'value'
 
-export const createWishList = (userId: string, name: string, description: string) => {
+type CreateWishList = {
+    userId: string
+    name: string
+    description: string
+}
+export const createWishList = ({ userId, name, description }: CreateWishList) => {
     const wishListRef = db.database().ref(WISH_LIST_PREFIX)
     const newWishListRef = wishListRef.push()
 
     const wishList: WishList = {
         user_id: userId,
+        wish_list_id: 'random wish list id',
         name,
         description,
         items: [],

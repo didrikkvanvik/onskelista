@@ -1,27 +1,21 @@
 import React, { FC, useEffect, useState } from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
-import { useAppContext } from '../../../App'
+import { useAppContext } from '../../../../App'
 
-import { colors } from '../../assets/styles/index.native'
-import Button from '../../components/Button/index.native'
-import Text from '../../components/Text/index.native'
+import { colors } from '../../../assets/styles/index.native'
+import Button from '../../../components/Button/index.native'
+import Text from '../../../components/Text/index.native'
 
-import { createGroup } from '../../database/group'
+import { createGroup } from '../../../database/group'
 
-function getTitle(type: 'group' | 'single'): string {
-    return type === 'group' ? 'Ønskegruppe' : 'ØnskeListe'
-}
-const CreateList: FC<Props> = ({ navigation, route }) => {
+const CreateGroup: FC<Props> = ({ navigation }) => {
     const { storage } = useAppContext()
     const [name, setName] = useState<string>('')
     const [description, setDescription] = useState<string>('')
     const currentUserId = storage?.user?.user?.uid
 
-    const { type } = route.params
-    const isGroup = type === 'group'
-
     useEffect(() => {
-        navigation.setOptions({ title: getTitle(type) })
+        navigation.setOptions({ title: 'Opprett Gruppe' })
     }, [])
 
     const create = () => {
@@ -31,29 +25,27 @@ const CreateList: FC<Props> = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>{`Navn på ${isGroup ? 'gruppen' : 'ønskelista'}`}</Text>
+            <Text style={styles.label}>Navn på gruppen</Text>
 
             <TextInput
                 onChangeText={setName}
-                placeholder={isGroup ? 'Secret santa' : 'Bursdagsgaver'}
+                placeholder="Secret Santa"
                 placeholderTextColor={colors.brand.gray}
                 style={[styles.textInput, styles.shadow]}
                 value={name}
             />
-            <Text style={styles.label}>
-                {`Beskriv formålet med ${isGroup ? 'gruppen' : 'ønskelista'}:`}
-            </Text>
+            <Text style={styles.label}>Beskriv formålet med gruppen</Text>
 
             <TextInput
                 multiline
                 onChangeText={setDescription}
-                placeholder={isGroup ? 'Dele glede med familien' : 'Gaver til min bursdag'}
+                placeholder="Dele glede med familien"
                 placeholderTextColor={colors.brand.gray}
                 style={[styles.textInput, styles.largeTextInput, styles.shadow]}
                 value={description}
             />
             <Button
-                label={isGroup ? 'Opprett gruppe' : 'Opprett ønskeliste'}
+                label="Opprett gruppe"
                 onPress={create}
                 style={styles.button}
                 variant="midnight"
@@ -100,7 +92,6 @@ const styles = StyleSheet.create({
 
 type Props = {
     navigation: any
-    route: any
 }
 
-export default CreateList
+export default CreateGroup
