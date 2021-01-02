@@ -7,6 +7,8 @@ import { HomeStackScreen } from './src/navigation/router'
 
 import LoginScreen from './src/screens/Login/index.native'
 
+import './src/database/config'
+
 export const AppContext: any = createContext({
     storage: defaultStorage,
     updateStorage: () => {},

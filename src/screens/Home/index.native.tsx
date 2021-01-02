@@ -10,6 +10,8 @@ import { useAppContext } from '../../../App'
 
 import NewListModal from './NewListModal'
 
+console.disableYellowBox = true
+
 const Home: FC<Props> = ({ navigation }) => {
     const { storage } = useAppContext()
     const [isNewListModalVisible, setIsNewListModalVisible] = useState<boolean>(false)
@@ -19,7 +21,6 @@ const Home: FC<Props> = ({ navigation }) => {
     }
 
     const createList = (type: 'group' | 'single') => {
-        console.log('type', type)
         navigation.navigate('CreateList', { type })
     }
 

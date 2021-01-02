@@ -5,6 +5,8 @@ import { colors } from '../../assets/styles/index.native'
 import Button from '../../components/Button/index.native'
 import Text from '../../components/Text/index.native'
 
+import { createGroup } from '../../database/group'
+
 function getTitle(type: 'group' | 'single'): string {
     return type === 'group' ? 'Ønskegruppe' : 'ØnskeListe'
 }
@@ -20,7 +22,7 @@ const CreateList: FC<Props> = ({ navigation, route }) => {
     }, [])
 
     const create = () => {
-        console.log('CREATE')
+        createGroup(name, description, [], [])
     }
 
     return (

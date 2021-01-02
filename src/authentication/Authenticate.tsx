@@ -1,71 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, Button } from 'react-native'
+import React, { useState } from 'react'
 import auth from '@react-native-firebase/auth'
-import { AppleButton } from '@invertase/react-native-apple-authentication'
 import { appleAuth } from '@invertase/react-native-apple-authentication'
-import { getStorage, setStorage } from './storage'
 
-type AppleSignInProps = { onPress: () => any }
-export function AppleSignIn({ onPress }: AppleSignInProps) {
-    return (
-        <AppleButton
-            buttonStyle={AppleButton.Style.BLACK}
-            buttonType={AppleButton.Type.SIGN_IN}
-            onPress={onPress}
-            style={{
-                width: '90%',
-                marginHorizontal: 20,
-                marginTop: 10,
-                height: 60,
-                borderRadius: 4,
-            }}
-        />
-    )
-}
-
-const signInAnonymously = (onResult) => {
-    auth()
-        .signInAnonymously()
-        .then((res) => {
-            console.log('User signed in anonymously')
-            onResult(res)
-        })
-        .catch((error) => {
-            if (error.code === 'auth/operation-not-allowed') {
-                console.log('Enable anonymous in your firebase console.')
-            }
-
-            console.error(error)
-        })
-}
-
-function signInWithEmailAndPassword(email: string, password: string) {
-    // email : jane.doe@example.com
-    // password: SuperSecretPassword!
-    auth()
-        .signInWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
-        .then((user) => {
-            console.log('User account signed in!', user)
-            return user
-        })
-        .catch((error) => {
-            console.error('error', error)
-            return undefined
-        })
-}
-
-function signUp(email: string, password: string) {
-    auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then((user) => {
-            console.log('User account created & signed in!', user)
-            return user
-        })
-        .catch((error) => {
-            console.error('error', error)
-            return undefined
-        })
-}
+import { createUser, getUsers } from '../database/user'
 
 export async function onAppleButtonPress() {
     // Start the sign-in request
@@ -113,7 +50,7 @@ export function useAuthenticate(storage: any, updateStorage: any) {
 
     const onLogin = (email: string, password: string) => {
         auth()
-            .signInWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
+            .signInWithEmailAndPassword('john.doe@example.com', 'password')
             .then((loggedInUser) => {
                 onAuthStateChanged(loggedInUser)
             })
@@ -137,8 +74,14 @@ export function useAuthenticate(storage: any, updateStorage: any) {
 
     const onSignUp = (email: string, password: string) => {
         auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then(onAuthStateChanged)
+            .createUserWithEmailAndPassword('john.doe@example.com', 'password')
+            .then((user) => {
+                if (user) {
+                    onAuthStateChanged(user)
+                    const uid = user.user.uid
+                    createUser({ userId: uid, name: '', email, password })
+                }
+            })
             .catch((error) => {
                 updateStorage({
                     ...storage,

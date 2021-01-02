@@ -6,7 +6,7 @@ import { TapGestureHandler, State as GestureState } from 'react-native-gesture-h
 import * as Animatable from 'react-native-animatable'
 
 import Text from '../../components/Text/index.native'
-import { AppleSignIn } from '../../authentication/Authenticate'
+import AppleSignIn from '../../components/AppleSignIn/index.native'
 
 import { runTiming, DEFAULT_HEIGHT } from './helper'
 import Inputs from './Inputs'
