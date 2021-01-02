@@ -13,6 +13,7 @@ const Button = ({
     borderColor,
     variant = 'default',
     children,
+    useShadow,
 }: Props) => {
     const isDefault = variant === 'default'
 
@@ -23,6 +24,7 @@ const Button = ({
         },
         styles.button,
         isDefault ? styles.default : styles.contrast,
+        useShadow ? styles.shadow : undefined,
         style,
     ]
 
@@ -33,8 +35,8 @@ const Button = ({
     ]
 
     return (
-        <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={buttonStyles}>
-            <Text style={textStyles}>{label}</Text>
+        <TouchableOpacity activeOpacity={0.6} onPress={onPress} style={buttonStyles}>
+            {label && <Text style={textStyles}>{label}</Text>}
             {children}
         </TouchableOpacity>
     )
@@ -46,8 +48,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     button: {
-        width: '90%',
-        marginHorizontal: 20,
+        width: '100%',
         height: 52,
         borderRadius: 4,
         justifyContent: 'center',
@@ -61,6 +62,15 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: colors.brand.blue,
     },
+    shadow: {
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.5,
+        shadowColor: 'rgba(0,0,0,0.6)',
+        marginTop: 30,
+    },
 })
 
 type Props = {
@@ -72,6 +82,7 @@ type Props = {
     borderColor?: string
     variant?: string
     children?: any
+    useShadow?: boolean
 }
 
 export default Button

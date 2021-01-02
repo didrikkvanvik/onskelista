@@ -17,7 +17,7 @@ export const colors = {
     white: '#fff',
     black: '#1a1917',
     error: '#d31b1b',
-    shadow: 'rgba(0, 0, 0, 0.30)',
+    shadow: 'rgba(0, 0, 0, 0.3)',
 }
 
 export const cardHeight = Dimensions.get('window').height * 0.45
