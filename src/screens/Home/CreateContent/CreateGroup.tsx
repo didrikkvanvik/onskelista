@@ -66,12 +66,12 @@ const styles = StyleSheet.create({
         borderWidth: 1.3,
         paddingLeft: 16,
         marginVertical: 5,
-        borderColor: colors.gray,
+        borderColor: colors.gray.gray,
     },
     label: {
         fontSize: 14,
         marginTop: 20,
-        color: colors.light_blue,
+        color: colors.brand.primary10,
     },
     largeTextInput: {
         height: 120,

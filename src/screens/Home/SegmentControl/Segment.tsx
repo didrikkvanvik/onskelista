@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     },
     text: {
         alignSelf: 'center',
-        color: colors.brand.blue,
+        color: colors.brand.primary,
     },
     shadow: {
         shadowOffset: {

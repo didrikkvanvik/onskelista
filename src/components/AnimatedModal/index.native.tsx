@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     },
     pill: {
         alignSelf: 'center',
-        backgroundColor: colors.gray,
+        backgroundColor: colors.gray.gray,
         borderRadius: 20,
         height: 4,
         top: 10,

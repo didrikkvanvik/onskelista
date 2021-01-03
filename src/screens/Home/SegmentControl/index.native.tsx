@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.gray,
+        backgroundColor: colors.gray.gray,
     },
     segment: {
         flex: 1,

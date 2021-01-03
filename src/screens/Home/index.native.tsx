@@ -89,7 +89,7 @@ const Home: FC<Props> = ({ navigation }) => {
                 useShadow
                 variant="midnight"
             >
-                <Icon color={colors.brand.blue} name="plus" size={32} type="antdesign" />
+                <Icon color={colors.brand.primary} name="plus" size={32} type="antdesign" />
             </Button>
 
             <NewListModal

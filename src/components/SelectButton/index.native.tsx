@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         marginTop: 8,
     },
     button: {
-        borderColor: colors.gray10,
+        borderColor: colors.gray.gray10,
         borderRadius: 4,
         borderWidth: 2,
         flexDirection: 'row',
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         borderColor: colors.black,
     },
     label: {
-        color: colors.light_blue,
+        color: colors.brand.primary10,
         fontSize: 12,
         lineHeight: 18,
         marginBottom: -3,

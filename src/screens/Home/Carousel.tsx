@@ -86,7 +86,7 @@ function Carousel({ onLastPage, views, onPress }: Props, ref: any) {
                     width="100%"
                 >
                     <AnimatedLine
-                        stroke={colors.brand.blue}
+                        stroke={colors.brand.primary}
                         strokeLinecap="round"
                         strokeWidth={160}
                         x1={animatedScrollX.interpolate({

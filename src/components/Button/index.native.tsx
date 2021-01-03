@@ -12,6 +12,7 @@ const Button = ({
     textStyle,
     borderColor,
     variant = 'default',
+    warning,
     children,
     useShadow,
 }: Props) => {
@@ -25,12 +26,13 @@ const Button = ({
         styles.button,
         isDefault ? styles.default : styles.contrast,
         useShadow ? styles.shadow : undefined,
+        warning ? styles.warning : undefined,
         style,
     ]
-
+    const defaultTextColor = isDefault ? colors.white : colors.brand.primary
     const textStyles = [
         styles.text,
-        { color: isDefault ? colors.white : colors.brand.blue },
+        { color: warning ? colors.error : defaultTextColor },
         textStyle,
     ]
 
@@ -44,7 +46,7 @@ const Button = ({
 
 const styles = StyleSheet.create({
     text: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: '600',
     },
     button: {
@@ -55,12 +57,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     default: {
-        backgroundColor: colors.brand.blue,
+        backgroundColor: colors.brand.primary,
     },
     contrast: {
         backgroundColor: colors.white,
         borderWidth: 2,
-        borderColor: colors.brand.blue,
+        borderColor: colors.brand.primary,
+    },
+    warning: {
+        borderColor: colors.error,
     },
     shadow: {
         shadowOffset: {
@@ -83,6 +88,7 @@ type Props = {
     variant?: string
     children?: any
     useShadow?: boolean
+    warning?: boolean
 }
 
 export default Button
