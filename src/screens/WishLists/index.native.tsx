@@ -8,10 +8,32 @@ import { getWishListsForUser } from '../../database/wishlist'
 import { WishList } from '../../types'
 import { getUserUidFromStorage } from '../../utils/uuid'
 
+import Page from '../Home/Page'
+import ListView from './ListView'
+
+const pages = [
+    {
+        header: 'Velkommen til Oppskrifter',
+        text: 'Tinder for mat oppskrifter',
+    },
+    {
+        header: 'Oppdag nye oppskrifter',
+        text: 'Alle oppskrifter hentes fra Trines Matblogg. ',
+    },
+    {
+        header: 'Hvordan fungerer det?',
+        text: 'Swipe til høyre på oppskrifter du liker og swiper til venstre på de du ikke liker.',
+    },
+]
+
 const WishLists: FC<Props> = ({ navigation }) => {
     const { storage } = useAppContext()
     const userId = getUserUidFromStorage(storage)
     const [wishLists, setWishLists] = useState<WishList[]>([])
+    console.log('wishLists', wishLists)
+    const views = wishLists.map(({ name, description }) => (
+        <Page header={name} key={name} text={description} />
+    ))
 
     useEffect(() => {
         getWishListsForUser(userId).then(setWishLists)
@@ -23,7 +45,7 @@ const WishLists: FC<Props> = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 100 }}>ØNSKELISTER</Text>
+            <ListView onPress={() => {}} views={views} />
         </View>
     )
 }
@@ -31,9 +53,7 @@ const WishLists: FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        paddingTop: 100,
+        backgroundColor: colors.white,
     },
     logoutButton: {
         alignItems: 'center',

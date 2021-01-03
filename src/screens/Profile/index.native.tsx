@@ -17,12 +17,12 @@ const Profile: FC<Props> = ({ navigation }) => {
         <View style={styles.container}>
             <TextInput onChange={setName} value={name} />
 
-            <Button label="Oppdater profil" onPress={updateName} style={{ marginTop: 20 }} />
+            <Button label="Oppdater profil" onPress={updateName} style={styles.button} />
 
             <Button
                 label="Logg ut"
                 onPress={onLogout}
-                style={{ marginTop: 20 }}
+                style={styles.button}
                 variant="midnight"
                 warning
             />
@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         flexDirection: 'column',
         paddingHorizontal: 20,
+    },
+    button: {
+        marginTop: 20,
     },
 })
 
