@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { Animated, Dimensions, Easing, ScrollView, StyleSheet, View } from 'react-native'
 import Svg, { Circle, Line } from 'react-native-svg'
@@ -22,16 +23,8 @@ function Carousel({ views, onPress }: Props, ref: any) {
     const { length: numberOfViews } = views
 
     useEffect(() => {
-        if (scrollOffset === scrollViewWidth - width) {
-            setIsOnLastPage(true)
-        } else {
-            setIsOnLastPage(false)
-        }
+        setIsOnLastPage(scrollOffset === scrollViewWidth - width)
     }, [numberOfViews, scrollOffset, scrollViewWidth, width])
-
-    // useEffect(() => {
-    //     if (isOnLastPage)
-    // }, [isOnLastPage])
 
     useImperativeHandle(
         ref,
@@ -107,22 +100,22 @@ function Carousel({ views, onPress }: Props, ref: any) {
         </View>
     )
 
+    const swipeIndicator = () => {
+        if (!showIndicator || views.length < 2 || isOnLastPage) return null
+
+        return (
+            <LottieView
+                autoPlay
+                loop
+                source={require('../../assets/animations/swipe-right.json')}
+                style={styles.animation}
+            />
+        )
+    }
+
     return (
         <View style={styles.container}>
-            {showIndicator && views.length > 1 && (
-                <LottieView
-                    autoPlay
-                    loop
-                    // eslint-disable-next-line no-undef
-                    source={require('../../assets/animations/swipe-right.json')}
-                    style={[
-                        styles.animation,
-                        isOnLastPage
-                            ? { left: 76, top: 18, transform: [{ rotate: '90deg' }] }
-                            : { right: -6 },
-                    ]}
-                />
-            )}
+            {swipeIndicator()}
 
             <ScrollView
                 horizontal
@@ -163,6 +156,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 26,
         zIndex: 10,
+        right: -6,
     },
     container: {
         flex: 1,
