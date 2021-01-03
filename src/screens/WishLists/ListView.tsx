@@ -5,6 +5,7 @@ import Svg, { Circle, Line } from 'react-native-svg'
 import LottieView from 'lottie-react-native'
 
 import { colors } from '../../assets/styles/index.native'
+import Page from '../Home/Page'
 
 const AnimatedLine = Animated.createAnimatedComponent(Line)
 const BUTTON_RADIUS = 10
@@ -136,9 +137,14 @@ function Carousel({ views, onPress }: Props, ref: any) {
                 showsHorizontalScrollIndicator={false}
                 style={styles.scrollView}
             >
-                {views.map((view) => (
-                    <View key={view.key} style={{ width }}>
-                        {view}
+                {views.map(({ name, description }, index) => (
+                    <View key={name} style={{ width }}>
+                        <Page
+                            header={name}
+                            isVisible={index === getActiveViewIndex()}
+                            key={name}
+                            text={description}
+                        />
                     </View>
                 ))}
             </ScrollView>

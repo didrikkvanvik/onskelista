@@ -11,41 +11,19 @@ import { getUserUidFromStorage } from '../../utils/uuid'
 import Page from '../Home/Page'
 import ListView from './ListView'
 
-const pages = [
-    {
-        header: 'Velkommen til Oppskrifter',
-        text: 'Tinder for mat oppskrifter',
-    },
-    {
-        header: 'Oppdag nye oppskrifter',
-        text: 'Alle oppskrifter hentes fra Trines Matblogg. ',
-    },
-    {
-        header: 'Hvordan fungerer det?',
-        text: 'Swipe til høyre på oppskrifter du liker og swiper til venstre på de du ikke liker.',
-    },
-]
-
 const WishLists: FC<Props> = ({ navigation }) => {
     const { storage } = useAppContext()
     const userId = getUserUidFromStorage(storage)
     const [wishLists, setWishLists] = useState<WishList[]>([])
-    console.log('wishLists', wishLists)
-    const views = wishLists.map(({ name, description }) => (
-        <Page header={name} key={name} text={description} />
-    ))
 
     useEffect(() => {
         getWishListsForUser(userId).then(setWishLists)
-    }, [])
-
-    useEffect(() => {
         navigation.setOptions({ title: 'Ønskelister' })
     }, [])
 
     return (
         <View style={styles.container}>
-            <ListView onPress={() => {}} views={views} />
+            <ListView onPress={() => {}} views={wishLists} />
         </View>
     )
 }
