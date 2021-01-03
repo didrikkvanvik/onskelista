@@ -35,7 +35,7 @@ export function getCurrentUser() {
     return auth().currentUser
 }
 
-export function useAuthenticate(storage: any, updateStorage: any) {
+export function useAuthenticate() {
     const [initializing, setInitializing] = useState(true)
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
     const [user, setUser] = useState<any>()
@@ -58,12 +58,11 @@ export function useAuthenticate(storage: any, updateStorage: any) {
     const onLogin = (email: string, password: string) => {
         auth()
             .signInWithEmailAndPassword('john.doe@example.com', 'password')
-            .then((user) => onAuthStateChanged(user))
+            .then((user) => {
+                onAuthStateChanged(user)
+            })
             .catch((error) => {
-                updateStorage({
-                    ...storage,
-                    loginError: error,
-                })
+                console.log('Login error: ', error)
             })
     }
 
@@ -81,20 +80,24 @@ export function useAuthenticate(storage: any, updateStorage: any) {
         auth()
             .createUserWithEmailAndPassword('john.doe@example.com', 'password')
             .then((user) => {
-                console.log('what', user)
                 onAuthStateChanged(user)
                 const uid = user.user.uid
                 createUser({ userId: uid, name: '', email, password })
             })
             .catch((error) => {
                 console.log('signup error', error)
-                updateStorage({
-                    ...storage,
-                    signUpError: error,
-                })
             })
     }
 
+    const updateProfileDisplayName = (displayName: string) => {
+        const currentUser = auth().currentUser
+        if (currentUser) {
+            currentUser
+                .updateProfile({ displayName })
+                .then(() => onAuthStateChanged(auth().currentUser))
+        }
+    }
+    console.log('user in auth', user)
     return {
         user,
         onLogin,
@@ -102,5 +105,6 @@ export function useAuthenticate(storage: any, updateStorage: any) {
         onLogout,
         isLoggedIn,
         onSignUp,
+        updateProfileDisplayName,
     }
 }

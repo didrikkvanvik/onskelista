@@ -43,12 +43,7 @@ export const getUserById = async (id: string) => {
 }
 
 export const updateUserDisplayName = async (id: string, displayName: string) => {
-    const wishList = await db
-        .database()
-        .ref(`${USER_PREFIX}/${id}`)
-        .update({ name: displayName })
-        .then(() => console.log('done'))
-        .catch((e) => console.log('set error', e))
+    const wishList = await db.database().ref(`${USER_PREFIX}/${id}`).update({ name: displayName })
 
     return wishList
 }

@@ -6,19 +6,11 @@ import { useAppContext } from '../../../App'
 import { colors } from '../../assets/styles/index.native'
 import { useAuthenticate } from '../../authentication/Authenticate'
 import Text from '../../components/Text/index.native'
-import { getUserById, updateUserDisplayName } from '../../database/user'
 
 const Profile: FC<Props> = ({ navigation }) => {
-    const { storage, updateStorage, user } = useAppContext()
-    const { onLogout } = useAuthenticate(storage, updateStorage)
+    const { updateProfileDisplayName, onLogout } = useAppContext()
 
-    const updateName = async () => {
-        const id = user?._user?.uid
-        // getUserById(id).then((res) => console.log('res', res))
-        updateUserDisplayName(id, 'Didrik')
-        // const user = await auth().currentUser
-        // auth().currentUser.updateProfile({ displayName: 'Per' })
-    }
+    const updateName = () => updateProfileDisplayName('Didrik Kvanvik')
 
     return (
         <View style={styles.container}>

@@ -9,13 +9,14 @@ import { colors } from '../../assets/styles/index.native'
 import Button from '../../components/Button/index.native'
 import Text from '../../components/Text/index.native'
 import NewListModal from './NewListModal'
+import { useAuthenticate } from '../../authentication/Authenticate'
 
 console.disableYellowBox = true
 
 const Home: FC<Props> = ({ navigation }) => {
     const { user = {} } = useAppContext()
-    const displayName = user?._user?.displayName || ''
 
+    const displayName = user?._user?.displayName || ''
     const [isNewListModalVisible, setIsNewListModalVisible] = useState<boolean>(false)
 
     const navigateToProfile = () => {
