@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     default: {
-        backgroundColor: colors.brand.primary,
+        backgroundColor: colors.brand.primary10,
     },
     contrast: {
         backgroundColor: colors.white,

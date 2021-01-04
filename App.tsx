@@ -5,6 +5,7 @@ import { useAuthenticate } from './src/authentication/Authenticate'
 import { defaultStorage, useStorage } from './src/authentication/storage'
 import { HomeStackScreen } from './src/navigation/router'
 import LoginScreen from './src/screens/Login/index.native'
+import { navigationRef, isReadyRef } from './src/navigation/index'
 
 import './src/database/config'
 
@@ -29,7 +30,12 @@ function App() {
 
     if (isLoggedIn) {
         return (
-            <NavigationContainer>
+            <NavigationContainer
+                onReady={() => {
+                    isReadyRef.current = true
+                }}
+                ref={navigationRef}
+            >
                 <AppContext.Provider
                     value={{ storage, updateStorage, user, updateProfileDisplayName, onLogout }}
                 >

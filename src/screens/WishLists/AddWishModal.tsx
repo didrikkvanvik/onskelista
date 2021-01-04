@@ -12,7 +12,6 @@ function AddWishModal({ isVisible, onPress, onClose }: Props) {
     const [name, setName] = useState<string>('')
     const [price, setPrice] = useState<number>(0)
     const [description, setDescription] = useState<string>('')
-    // const [tags, setTags] = useState<string[]>([])
     const [url, setUrl] = useState<string>('')
     const [error, setError] = useState<string>()
 

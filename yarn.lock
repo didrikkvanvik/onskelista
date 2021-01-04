@@ -2070,6 +2070,13 @@
   dependencies:
     "@types/react" "^16"
 
+"@types/react-native-safari-view@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@types/react-native-safari-view/-/react-native-safari-view-2.0.4.tgz#e63f63f2076706c55239549a6f37a248826531f1"
+  integrity sha512-3JudJX4RSO2ibf1SJ1nQzlNa/fErxQ5M6HTQwYMnmMl7agxEbO2z7ahuECkDiZZIHPd0BP+HnWHzJ2PQNe10yg==
+  dependencies:
+    "@types/react-native" "*"
+
 "@types/react-native-vector-icons@^6.4.5", "@types/react-native-vector-icons@^6.4.6":
   version "6.4.6"
   resolved "https://registry.yarnpkg.com/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.6.tgz#848e3b14572def56212cafbf5cb1254b445bfb41"
@@ -7864,6 +7871,11 @@ react-native-reanimated@~1.13.0:
   integrity sha512-O+WhgxSjOIzcVdAAvx+h2DY331Ek1knKlaq+jsNLpC1fhRy9XTdOObovgob/aF2ve9uJfPEawCx8381g/tUJZQ==
   dependencies:
     fbjs "^1.0.0"
+
+react-native-safari-view@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-safari-view/-/react-native-safari-view-2.1.0.tgz#1e0cd12c62bce79bc1759c7e281646b08b61c959"
+  integrity sha1-HgzRLGK855vBdZx+KBZGsIthyVk=
 
 react-native-safe-area-context@3.1.9, react-native-safe-area-context@^3.1.9:
   version "3.1.9"

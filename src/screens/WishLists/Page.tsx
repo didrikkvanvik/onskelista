@@ -4,11 +4,15 @@ import React, { FC, useEffect, useRef, useState } from 'react'
 import { ScrollView, StyleSheet, View, Image, Dimensions } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import LottieView from 'lottie-react-native'
+import SafariView from 'react-native-safari-view'
 
 import Text from '../../components/Text/index.native'
 import { colors } from '../../assets/styles/index.native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { WishList, WishListItem } from '../../types'
+import Card from './Card'
+import * as RootNavigation from '../../navigation/index'
+import { Route } from '../../navigation/router'
 
 const Page: FC<Props> = ({ wishList, isVisible, editPress }) => {
     const [width] = useState<number>(Math.floor(Dimensions.get('window').width))
@@ -44,6 +48,21 @@ const Page: FC<Props> = ({ wishList, isVisible, editPress }) => {
         </>
     )
 
+    // const openUrl = (url: string) => {
+    //     SafariView.isAvailable()
+    //         .then(() => {
+    //             SafariView.show({
+    //                 url,
+    //                 fromBottom: true,
+    //             })
+    //         })
+    //         .catch(() => {})
+    // }
+
+    const navigateToEditWish = (wish: WishListItem) => {
+        RootNavigation.navigate(Route.EDIT_WISH, { wish })
+    }
+
     return (
         <View style={[styles.page, { width }]}>
             <Animatable.View
@@ -77,35 +96,13 @@ const Page: FC<Props> = ({ wishList, isVisible, editPress }) => {
                     <Text style={styles.description}>{description}</Text>
 
                     <View style={styles.wishes}>
-                        {items.map((item: WishListItem) => (
-                            <View key={item.wish_list_item_id} style={styles.wish}>
-                                <Image
-                                    resizeMode="stretch"
-                                    source={require('../../assets/images/gift-box.png')}
-                                    style={styles.giftBox}
-                                />
-                                <View style={styles.wishInfo}>
-                                    <Text style={{ fontWeight: 'bold', marginBottom: 4 }}>
-                                        {item.name}
-                                    </Text>
-                                    {item.description ? (
-                                        <Text
-                                            style={{
-                                                fontSize: 14,
-                                                color: colors.brand.gray,
-                                                marginBottom: 4,
-                                            }}
-                                        >
-                                            {item.description}
-                                        </Text>
-                                    ) : null}
-                                    {hasPrice(item) ? (
-                                        <Text style={{ textDecorationLine: 'underline' }}>
-                                            Pris: {item.price}
-                                        </Text>
-                                    ) : null}
-                                </View>
-                            </View>
+                        {/* eslint-disable-next-line no-extra-parens */}
+                        {items.map((wish: WishListItem) => (
+                            <Card
+                                key={wish.wish_list_item_id}
+                                onPress={() => navigateToEditWish(wish)}
+                                wish={wish}
+                            />
                         ))}
                     </View>
                 </Animatable.View>
@@ -165,7 +162,7 @@ const styles = StyleSheet.create({
         height: '60%',
         marginTop: 60,
         width: '90%',
-        paddingHorizontal: 10,
+        paddingHorizontal: 2,
         marginBottom: 50,
     },
     shadow: {
@@ -200,33 +197,6 @@ const styles = StyleSheet.create({
     wishes: {
         flexDirection: 'column',
         marginTop: 10,
-    },
-    wish: {
-        width: '100%',
-        flexDirection: 'row',
-        height: 130,
-        borderRadius: 4,
-        paddingTop: 16,
-        paddingHorizontal: 12,
-        borderColor: colors.white,
-        marginBottom: 10,
-        backgroundColor: colors.white,
-        elevation: 2,
-        shadowColor: colors.shadow,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.7,
-        shadowRadius: 2,
-    },
-    giftBox: {
-        width: 100,
-        height: 100,
-        marginRight: 12,
-    },
-    wishInfo: {
-        marginTop: 8,
     },
 })
 
