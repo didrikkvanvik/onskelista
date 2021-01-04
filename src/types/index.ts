@@ -1,6 +1,7 @@
-type WishListItem = {
+export type WishListItem = {
+    wish_list_item_id: string
     name: string
-    description: string
+    description?: string
     price?: number
     tags?: string[]
     url?: string
@@ -9,6 +10,7 @@ type WishListItem = {
 }
 
 export type WishList = {
+    wish_list_id: string
     name: string
     description: string
     items?: WishListItem[]

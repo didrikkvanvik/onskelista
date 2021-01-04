@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2,
         },
-        shadowOpacity: 0.3,
-        shadowColor: 'rgba(0,0,0,0.3)',
+        shadowOpacity: 0.5,
+        shadowColor: 'rgba(0,0,0,0.6)',
     },
     button: {
         marginTop: 20,

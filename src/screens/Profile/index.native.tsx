@@ -15,7 +15,7 @@ const Profile: FC<Props> = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <TextInput onChange={setName} value={name} />
+            <TextInput onChange={setName} placeholder="Navn" value={name} />
 
             <Button label="Oppdater profil" onPress={updateName} style={styles.button} />
 

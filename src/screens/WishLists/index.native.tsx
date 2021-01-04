@@ -3,9 +3,11 @@ import { StyleSheet, View } from 'react-native'
 import { useAppContext } from '../../../App'
 
 import { colors } from '../../assets/styles/index.native'
-import { getWishListsForUser } from '../../database/wishlist'
-import { WishList } from '../../types'
+import { getWishListsForUser, addWishToWishList } from '../../database/wishlist'
+import { WishList, WishListItem } from '../../types'
 import { getUserUidFromStorage } from '../../utils/uuid'
+import { updateWishList } from '../../utils/wishlist'
+import AddWishModal from './AddWishModal'
 
 import ListView from './ListView'
 
@@ -13,15 +15,36 @@ const WishLists: FC<Props> = ({ navigation }) => {
     const { storage } = useAppContext()
     const userId = getUserUidFromStorage(storage)
     const [wishLists, setWishLists] = useState<WishList[]>([])
+    const [isAddWishModalVisible, setIsAddWishModalVisible] = useState<boolean>(false)
+    const [selectedWishListId, setSelectedWishListId] = useState<string>('')
 
     useEffect(() => {
         getWishListsForUser(userId).then(setWishLists)
         navigation.setOptions({ title: 'Ønskelister' })
     }, [])
 
+    const onAddWish = async (wishListItem: WishListItem) => {
+        setIsAddWishModalVisible(false)
+        const updatedList = await addWishToWishList(selectedWishListId, wishListItem)
+        const updatedWishLists = updateWishList(updatedList, wishLists)
+        setWishLists(updatedWishLists)
+    }
+
     return (
         <View style={styles.container}>
-            <ListView onPress={() => {}} views={wishLists} />
+            <ListView
+                editPress={(id: string) => {
+                    setSelectedWishListId(id)
+                    setIsAddWishModalVisible(true)
+                }}
+                onPress={() => {}}
+                views={wishLists}
+            />
+            <AddWishModal
+                isVisible={isAddWishModalVisible}
+                onClose={() => setIsAddWishModalVisible(false)}
+                onPress={onAddWish}
+            />
         </View>
     )
 }

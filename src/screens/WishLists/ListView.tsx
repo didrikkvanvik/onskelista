@@ -11,7 +11,7 @@ const AnimatedLine = Animated.createAnimatedComponent(Line)
 const BUTTON_RADIUS = 10
 const DISTANCE_BETWEEN_CIRCLE_CENTER = 38
 
-function ListView({ views, onPress }: Props, ref: any) {
+function ListView({ views, onPress, editPress }: Props, ref: any) {
     const scrollView = useRef(null)
 
     const [width] = useState<number>(Math.floor(Dimensions.get('window').width))
@@ -137,15 +137,13 @@ function ListView({ views, onPress }: Props, ref: any) {
                 showsHorizontalScrollIndicator={false}
                 style={styles.scrollView}
             >
-                {views.map(({ name, description }, index) => (
-                    <View key={name} style={{ width }}>
-                        <Page
-                            header={name}
-                            isVisible={index === getActiveViewIndex()}
-                            key={name}
-                            text={description}
-                        />
-                    </View>
+                {views.map((wishList, index) => (
+                    <Page
+                        editPress={() => editPress(wishList.wish_list_id)}
+                        isVisible={index === getActiveViewIndex()}
+                        key={wishList.wish_list_id}
+                        wishList={wishList}
+                    />
                 ))}
             </ScrollView>
 
@@ -208,6 +206,7 @@ const styles = StyleSheet.create({
 type Props = {
     views: Array<any>
     onPress: () => void
+    editPress: (wish_list_id: string) => void
 }
 
 export default forwardRef<Props, any>(ListView)
