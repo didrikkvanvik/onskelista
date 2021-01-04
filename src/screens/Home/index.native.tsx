@@ -4,12 +4,10 @@ import { Icon } from 'react-native-elements'
 import LottieView from 'lottie-react-native'
 
 import { useAppContext } from '../../../App'
-
 import { colors } from '../../assets/styles/index.native'
 import Button from '../../components/Button/index.native'
 import Text from '../../components/Text/index.native'
 import NewListModal from './NewListModal'
-import { useAuthenticate } from '../../authentication/Authenticate'
 
 console.disableYellowBox = true
 
@@ -62,24 +60,21 @@ const Home: FC<Props> = ({ navigation }) => {
             {renderWelcomeHeader()}
             <View style={styles.cards}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('Friends')}
+                    activeOpacity={0.7}
+                    onPress={() => navigation.navigate('Groups')}
                     style={styles.card}
                 >
-                    {peopleAnimation(require('../../assets/animations/people.json'))}
-                    <Text>Venner</Text>
+                    {peopleAnimation(require('../../assets/animations/groups.json'))}
+                    <Text>Grupper</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
+                    activeOpacity={0.7}
                     onPress={() => navigation.navigate('WishLists')}
                     style={styles.card}
                 >
                     {peopleAnimation(require('../../assets/animations/wishlists.json'))}
                     <Text>Ønskelister</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => navigation.navigate('Groups')} style={styles.card}>
-                    {peopleAnimation(require('../../assets/animations/groups.json'))}
-                    <Text>Grupper</Text>
                 </TouchableOpacity>
             </View>
 
@@ -110,7 +105,7 @@ const styles = StyleSheet.create({
     },
     cards: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         flexWrap: 'wrap',
     },
     createListButton: {
@@ -138,8 +133,8 @@ const styles = StyleSheet.create({
         top: 50,
     },
     card: {
-        height: 170,
-        width: 140,
+        height: 190,
+        width: 160,
         paddingTop: 10,
         alignItems: 'center',
         backgroundColor: colors.white,

@@ -5,13 +5,13 @@ import Svg, { Circle, Line } from 'react-native-svg'
 import LottieView from 'lottie-react-native'
 
 import { colors } from '../../assets/styles/index.native'
-import Page from '../Home/Page'
+import Page from './Page'
 
 const AnimatedLine = Animated.createAnimatedComponent(Line)
 const BUTTON_RADIUS = 10
 const DISTANCE_BETWEEN_CIRCLE_CENTER = 38
 
-function Carousel({ views, onPress }: Props, ref: any) {
+function ListView({ views, onPress }: Props, ref: any) {
     const scrollView = useRef(null)
 
     const [width] = useState<number>(Math.floor(Dimensions.get('window').width))
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     shadow: {
         shadowOffset: {
             width: 0,
-            height: -4,
+            height: -2,
         },
         shadowOpacity: 1,
         shadowColor: 'rgba(0,0,0,0.3)',
@@ -210,4 +210,4 @@ type Props = {
     onPress: () => void
 }
 
-export default forwardRef<Props, any>(Carousel)
+export default forwardRef<Props, any>(ListView)

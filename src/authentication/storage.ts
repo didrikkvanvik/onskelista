@@ -42,7 +42,6 @@ export const useStorage = (): [storage: Storage, updateStorage: (storage: Storag
 
     useEffect(() => {
         getStorage().then(setLocalStorage)
-        // updateStorage(defaultStorage)
     }, [])
 
     return [storage, updateStorage]

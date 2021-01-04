@@ -6,6 +6,7 @@ import LottieView from 'lottie-react-native'
 
 import Text from '../../components/Text/index.native'
 import { colors } from '../../assets/styles/index.native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const Page: FC<Props> = ({ header, text, isVisible }) => {
     const [mount, setMount] = useState<boolean>(false)
@@ -45,7 +46,7 @@ const Page: FC<Props> = ({ header, text, isVisible }) => {
             >
                 <Image
                     resizeMode="stretch"
-                    source={require('../../assets/images/cards/christmas-background.jpg')}
+                    source={require('../../assets/images/cards/christmas-background2.jpg')}
                     style={styles.image}
                 />
                 <Text style={styles.absoluteHeader}>{header}</Text>
@@ -53,7 +54,17 @@ const Page: FC<Props> = ({ header, text, isVisible }) => {
 
             <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
                 <Animatable.View animation="fadeInUp" duration={350}>
-                    <Text style={styles.header}>Ønskeliste</Text>
+                    <View style={styles.header}>
+                        <Text style={styles.headerText}>{header}</Text>
+                        <TouchableOpacity
+                            activeOpacity={0.6}
+                            onPress={() => {}}
+                            style={styles.editButton}
+                        >
+                            <Text style={styles.edit}>Rediger</Text>
+                        </TouchableOpacity>
+                    </View>
+
                     <Text style={styles.label}>Beskrivelse</Text>
                     <Text style={styles.description}>{text}</Text>
                 </Animatable.View>
@@ -72,9 +83,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 24,
     },
-    header: {
+    headerText: {
         fontSize: 24,
         fontWeight: '600',
+        maxWidth: 250,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    edit: {
+        textDecorationLine: 'underline',
+    },
+    editButton: {
+        paddingLeft: 10,
+        paddingVertical: 10,
     },
     description: {
         lineHeight: 24,
@@ -98,7 +122,7 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         height: '60%',
-        marginTop: 70,
+        marginTop: 60,
         width: '90%',
         paddingHorizontal: 20,
     },

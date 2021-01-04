@@ -4,7 +4,6 @@ import React, { createContext, useContext } from 'react'
 import { useAuthenticate } from './src/authentication/Authenticate'
 import { defaultStorage, useStorage } from './src/authentication/storage'
 import { HomeStackScreen } from './src/navigation/router'
-
 import LoginScreen from './src/screens/Login/index.native'
 
 import './src/database/config'

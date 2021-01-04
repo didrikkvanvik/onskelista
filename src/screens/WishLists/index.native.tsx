@@ -3,12 +3,10 @@ import { StyleSheet, View } from 'react-native'
 import { useAppContext } from '../../../App'
 
 import { colors } from '../../assets/styles/index.native'
-import Text from '../../components/Text/index.native'
 import { getWishListsForUser } from '../../database/wishlist'
 import { WishList } from '../../types'
 import { getUserUidFromStorage } from '../../utils/uuid'
 
-import Page from '../Home/Page'
 import ListView from './ListView'
 
 const WishLists: FC<Props> = ({ navigation }) => {
