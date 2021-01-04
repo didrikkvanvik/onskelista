@@ -1,5 +1,5 @@
 export type WishListItem = {
-    wish_list_item_id: string
+    wish_list_item_id?: string
     name: string
     description?: string
     price?: number

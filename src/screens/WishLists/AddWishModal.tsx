@@ -29,8 +29,8 @@ function AddWishModal({ isVisible, onPress, onClose }: Props) {
         setError(undefined)
     }
 
-    const updatePrice = (newPrice: number) => {
-        setPrice(newPrice)
+    const updatePrice = (newPrice: string) => {
+        setPrice(String(newPrice))
         setError(undefined)
     }
 
@@ -47,7 +47,7 @@ function AddWishModal({ isVisible, onPress, onClose }: Props) {
     const reset = () => {
         setName('')
         setDescription('')
-        setPrice(0)
+        setPrice(String(0))
         setUrl('')
         setError(undefined)
     }
@@ -59,7 +59,7 @@ function AddWishModal({ isVisible, onPress, onClose }: Props) {
 
     return (
         <AnimatedModal
-            height={Dimensions.get('window').height * 0.9}
+            height={Dimensions.get('window').height * 0.86}
             isVisible={isVisible}
             onClose={closeModal}
         >
