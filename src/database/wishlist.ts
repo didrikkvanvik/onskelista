@@ -62,7 +62,7 @@ export const getWishList = async (id: string) => {
 }
 
 export const addWishToWishList = async (id: string, wishListItem: WishListItem) => {
-    const ref = await db.database().ref(`${WISH_LIST_PREFIX}/${id}`)
+    const ref = db.database().ref(`${WISH_LIST_PREFIX}/${id}`)
     const wishList = await getWishList(id)
     const { items = [] } = wishList
     const itemToAdd: WishListItem = {
@@ -78,4 +78,35 @@ export const addWishToWishList = async (id: string, wishListItem: WishListItem) 
             const updatedWishList = await getWishList(id)
             return updatedWishList
         })
+}
+
+export const updateWishInWishList = async (id: string, wishListItem: WishListItem) => {
+    const ref = db.database().ref(`${WISH_LIST_PREFIX}/${id}`)
+    const wishList = await getWishList(id)
+    const { items = [] } = wishList
+    const updatedItems = items.map((item: WishListItem) => {
+        if (item.wish_list_item_id === wishListItem.wish_list_item_id) return wishListItem
+        return item
+    })
+
+    return await ref
+        .update({
+            items: updatedItems,
+        })
+        .then(async () => {
+            const updatedWishList = await getWishList(id)
+            return updatedWishList
+        })
+}
+export const deleteWishInWishList = async (id: string, wish_list_item_id: string) => {
+    const ref = db.database().ref(`${WISH_LIST_PREFIX}/${id}`)
+    const wishList = await getWishList(id)
+    const { items = [] } = wishList
+    const updatedItems = items.filter(
+        (item: WishListItem) => item.wish_list_item_id !== wish_list_item_id,
+    )
+    return await ref.update({ items: updatedItems }).then(async () => {
+        const updatedWishList = await getWishList(id)
+        return updatedWishList
+    })
 }

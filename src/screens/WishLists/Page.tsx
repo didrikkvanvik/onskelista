@@ -18,7 +18,7 @@ const Page: FC<Props> = ({ wishList, isVisible, editPress }) => {
     const [width] = useState<number>(Math.floor(Dimensions.get('window').width))
     const [mount, setMount] = useState<boolean>(false)
     const lottieRef = useRef()
-    const { name, description, items = [] } = wishList
+    const { name, description, items = [], wish_list_id } = wishList
     const hasWished = items.length > 0
 
     const hasPrice = (item: WishListItem) => item.price && item.price > 0
@@ -60,7 +60,7 @@ const Page: FC<Props> = ({ wishList, isVisible, editPress }) => {
     // }
 
     const navigateToEditWish = (wish: WishListItem) => {
-        RootNavigation.navigate(Route.EDIT_WISH, { wish })
+        RootNavigation.navigate(Route.EDIT_WISH, { wish, wish_list_id })
     }
 
     return (

@@ -5,9 +5,10 @@ import Text from '../../components/Text/index.native'
 import Button from '../../components/Button/index.native'
 import InputError from '../../components/InputError/index.native'
 import { colors } from '../../assets/styles/index.native'
+import { updateWishInWishList, deleteWishInWishList } from '../../database/wishlist'
 
 function EditWish({ route, navigation }: Props) {
-    const { wish } = route.params
+    const { wish, wish_list_id } = route.params
     const [name, setName] = useState<string>(wish.name)
     const [description, setDescription] = useState<string>(wish.description)
     const [price, setPrice] = useState<string>(String(wish.price))
@@ -18,13 +19,25 @@ function EditWish({ route, navigation }: Props) {
         navigation.setOptions({ title: wish.name })
     }, [])
 
-    const onSave = () => {
+    const onSave = async () => {
         if (!name.length) {
             setError('Du må fylle inn et navn.')
         } else {
-            // onPress({ name, description, price: Number(price), url })
+            const editedWish = {
+                wish_list_item_id: wish.wish_list_item_id,
+                name,
+                description,
+                price: Number(price),
+                url,
+            }
+            await updateWishInWishList(wish_list_id, editedWish)
             navigation.goBack()
         }
+    }
+
+    const onDelete = async () => {
+        await deleteWishInWishList(wish_list_id, wish.wish_list_item_id)
+        navigation.goBack()
     }
 
     const updateName = (text: string) => {
@@ -58,7 +71,7 @@ function EditWish({ route, navigation }: Props) {
             <TextInput
                 keyboardType="numeric"
                 onChangeText={setPrice}
-                placeholder="Navn"
+                placeholder="Pris"
                 placeholderTextColor={colors.brand.gray}
                 style={styles.textInput}
                 value={String(price)}
@@ -69,7 +82,7 @@ function EditWish({ route, navigation }: Props) {
             <TextInput
                 multiline
                 onChangeText={setUrl}
-                placeholder="Beskrivelse"
+                placeholder="Link (url)"
                 placeholderTextColor={colors.brand.gray}
                 style={[styles.textInput, styles.largeTextInput]}
                 value={url}
@@ -79,7 +92,7 @@ function EditWish({ route, navigation }: Props) {
             <Button label="Oppdater ønske" onPress={onSave} style={styles.button} />
             <Button
                 label="Slett ønske"
-                onPress={onSave}
+                onPress={onDelete}
                 style={styles.button}
                 variant="midnight"
                 warning

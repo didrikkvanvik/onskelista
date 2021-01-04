@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet, Dimensions, TextInput } from 'react-native'
 
 import Text from '../../components/Text/index.native'
 import AnimatedModal from '../../components/AnimatedModal/index.native'
 import Button from '../../components/Button/index.native'
-import TextInput from '../../components/TextInput/index.native'
 import InputError from '../../components/InputError/index.native'
 import { WishListItem } from '../../types'
+import { colors } from '../../assets/styles/index.native'
 
 function AddWishModal({ isVisible, onPress, onClose }: Props) {
     const [name, setName] = useState<string>('')
-    const [price, setPrice] = useState<number>(0)
+    const [price, setPrice] = useState<string>('')
     const [description, setDescription] = useState<string>('')
     const [url, setUrl] = useState<string>('')
     const [error, setError] = useState<string>()
@@ -59,44 +59,55 @@ function AddWishModal({ isVisible, onPress, onClose }: Props) {
 
     return (
         <AnimatedModal
-            height={Dimensions.get('window').height * 0.8}
+            height={Dimensions.get('window').height * 0.9}
             isVisible={isVisible}
             onClose={closeModal}
         >
             <Text style={styles.title}>Legg til ønske</Text>
+            <Text style={styles.label}>Navn</Text>
             <TextInput
-                onChange={updateName}
+                onChangeText={updateName}
                 placeholder="Navn"
+                placeholderTextColor={colors.brand.gray}
                 style={styles.textInput}
-                type="hosie"
                 value={name}
             />
+
+            <Text style={styles.label}>Beskrivelse</Text>
             <TextInput
-                onChange={updateDescription}
+                multiline
+                onChangeText={updateDescription}
                 placeholder="Beskrivelse"
-                style={styles.textInput}
-                type="hosie"
+                placeholderTextColor={colors.brand.gray}
+                style={[styles.textInput, styles.largeTextInput]}
                 value={description}
             />
+
+            <Text style={styles.label}>Pris (nok)</Text>
+
             <TextInput
                 keyboardType="numeric"
-                onChange={updatePrice}
+                onChangeText={updatePrice}
                 placeholder="Pris"
+                placeholderTextColor={colors.brand.gray}
                 style={styles.textInput}
-                type="hosie"
-                value={price}
+                value={String(price)}
             />
+
+            <Text style={styles.label}>Link (url)</Text>
+
             <TextInput
-                onChange={updateUrl}
-                placeholder="Url"
-                style={styles.textInput}
-                type="hosie"
+                multiline
+                onChangeText={updateUrl}
+                placeholder="Link (url)"
+                placeholderTextColor={colors.brand.gray}
+                style={[styles.textInput, styles.largeTextInput]}
                 value={url}
             />
 
-            <InputError error={error} style={styles.error} />
+            <InputError error={error} />
 
-            <Button label="Legg til ønske" onPress={onAddWish} />
+            <Button label="Legg til ønske" onPress={onAddWish} style={styles.button} />
         </AnimatedModal>
     )
 }
@@ -108,15 +119,28 @@ const styles = StyleSheet.create({
     },
     title: {
         alignSelf: 'center',
-        marginTop: 12,
         fontSize: 18,
         fontWeight: 'bold',
     },
-    textInput: {
-        marginBottom: 30,
+    label: {
+        fontSize: 14,
+        marginTop: 20,
+        color: colors.brand.primary10,
     },
-    error: {
-        marginBottom: 20,
+    textInput: {
+        height: 50,
+        borderRadius: 4,
+        borderWidth: 1.3,
+        paddingLeft: 16,
+        marginVertical: 5,
+        borderColor: colors.gray.gray,
+    },
+    largeTextInput: {
+        height: 120,
+        paddingTop: 12,
+    },
+    button: {
+        marginTop: 16,
     },
 })
 

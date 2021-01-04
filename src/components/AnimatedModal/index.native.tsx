@@ -194,6 +194,7 @@ class AnimatedModal extends Component<Props, State> {
                                 bounces={false}
                                 contentContainerStyle={contentContainer}
                                 keyboardShouldPersistTaps="handled"
+                                showsVerticalScrollIndicator={false}
                             >
                                 {children}
                             </ScrollView>
