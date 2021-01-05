@@ -110,3 +110,12 @@ export const deleteWishInWishList = async (id: string, wish_list_item_id: string
         return updatedWishList
     })
 }
+export const onWishListChangeListener = (onChange: (wishLists: WishList[]) => void) => {
+    return db
+        .database()
+        .ref('/wishlists')
+        .on('value', (snapshot) => {
+            const res = snapshot.val()
+            onChange(Object.values(res) as WishList[])
+        })
+}

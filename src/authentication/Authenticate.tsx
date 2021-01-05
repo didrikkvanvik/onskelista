@@ -97,7 +97,7 @@ export function useAuthenticate() {
                 .then(() => onAuthStateChanged(auth().currentUser))
         }
     }
-    console.log('user in auth', user)
+
     return {
         user,
         onLogin,

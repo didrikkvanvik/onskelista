@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { useAppContext } from '../../../App'
 
 import { colors } from '../../assets/styles/index.native'
-import { getWishListsForUser, addWishToWishList } from '../../database/wishlist'
+import { addWishToWishList, onWishListChangeListener } from '../../database/wishlist'
 import { WishList, WishListItem } from '../../types'
 import { getUserUidFromStorage } from '../../utils/uuid'
 import { updateWishList } from '../../utils/wishlist'
@@ -19,8 +19,11 @@ const WishLists: FC<Props> = ({ navigation }) => {
     const [selectedWishListId, setSelectedWishListId] = useState<string>('')
 
     useEffect(() => {
-        getWishListsForUser(userId).then(setWishLists)
         navigation.setOptions({ title: 'Ønskelister' })
+    }, [])
+
+    useEffect(() => {
+        onWishListChangeListener(setWishLists)
     }, [])
 
     const onAddWish = async (wishListItem: WishListItem) => {
